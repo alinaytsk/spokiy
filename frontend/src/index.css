@@ -1,0 +1,511 @@
+:root {
+  --bg: #f7f7f9;
+  --surface: #ffffff;
+  --border: #e0e0e6;
+  --text: #1c1c22;
+  --muted: #6a6a78;
+  --accent: #3b5bdb;
+  --accent-soft: #e7ecfd;
+  --on: #e8590c;
+  --on-soft: #fff0e6;
+  --good: #2b8a3e;
+  --bad: #c92a2a;
+
+  color-scheme: light dark;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #141418;
+    --surface: #1d1d23;
+    --border: #32323c;
+    --text: #ececf1;
+    --muted: #9a9aa8;
+    --accent: #748ffc;
+    --accent-soft: #232a45;
+    --on: #ff922b;
+    --on-soft: #3a2a18;
+    --good: #51cf66;
+    --bad: #ff6b6b;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.55;
+}
+
+code {
+  font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.92em;
+  background: var(--accent-soft);
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
+}
+
+.shell {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 16px 48px;
+}
+
+/* --- navigation ------------------------------------------------------------------- */
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 28px;
+}
+
+.nav a {
+  color: var(--text);
+  text-decoration: none;
+}
+
+.nav a:hover {
+  color: var(--accent);
+}
+
+.brand {
+  font-weight: 700;
+  font-size: 1.15rem;
+  letter-spacing: -0.02em;
+}
+
+.spacer {
+  flex: 1;
+}
+
+/* --- generic ---------------------------------------------------------------------- */
+.hero h1 {
+  font-size: 2.4rem;
+  margin: 0 0 8px;
+  letter-spacing: -0.03em;
+}
+
+.lede {
+  font-size: 1.05rem;
+  color: var(--muted);
+  max-width: 60ch;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.72rem;
+  color: var(--muted);
+  margin: 0 0 4px;
+}
+
+.muted {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.error {
+  color: var(--bad);
+}
+
+.notice {
+  background: var(--accent-soft);
+  border-left: 3px solid var(--accent);
+  padding: 10px 14px;
+  border-radius: 0 6px 6px 0;
+  font-size: 0.93rem;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 24px;
+}
+
+/* --- topic list ------------------------------------------------------------------- */
+.topicList {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 14px;
+}
+
+.topicList li {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 20px;
+}
+
+.topicList li.pending {
+  opacity: 0.72;
+}
+
+.topicList h2 {
+  margin: 0 0 4px;
+  font-size: 1.15rem;
+}
+
+.topicList h2 a {
+  color: var(--text);
+  text-decoration: none;
+}
+
+.topicList h2 a:hover {
+  color: var(--accent);
+}
+
+.topicList p {
+  margin: 0 0 4px;
+}
+
+/* --- lesson ----------------------------------------------------------------------- */
+.lesson header h1 {
+  margin: 0 0 8px;
+  font-size: 2rem;
+  letter-spacing: -0.02em;
+}
+
+.phases {
+  list-style: none;
+  display: flex;
+  gap: 8px;
+  padding: 0;
+  margin: 20px 0;
+  flex-wrap: wrap;
+}
+
+.phases li {
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  font-size: 0.85rem;
+  color: var(--muted);
+  background: var(--surface);
+}
+
+.phases li.on {
+  background: var(--on-soft);
+  border-color: var(--on);
+  color: var(--on);
+  font-weight: 600;
+}
+
+/* --- the SVG diagram -------------------------------------------------------------- */
+.diagram {
+  width: 100%;
+  height: auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.diagram .box {
+  fill: none;
+  stroke: var(--border);
+  stroke-width: 1.5;
+}
+
+.diagram .label {
+  fill: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.diagram .reg rect,
+.diagram .cell rect {
+  fill: var(--bg);
+  stroke: var(--border);
+  stroke-width: 1.5;
+  transition: fill 0.25s, stroke 0.25s;
+}
+
+.diagram .reg.on rect,
+.diagram .cell.on rect {
+  fill: var(--on-soft);
+  stroke: var(--on);
+  stroke-width: 2.5;
+}
+
+.diagram .regName {
+  fill: var(--muted);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.diagram .regValue,
+.diagram .cellText {
+  fill: var(--text);
+  font-size: 13px;
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+}
+
+.diagram .bus line {
+  stroke: var(--border);
+  stroke-width: 2;
+  transition: stroke 0.25s, stroke-width 0.25s;
+}
+
+.diagram .bus.on line {
+  stroke: var(--on);
+  stroke-width: 3.5;
+}
+
+.diagram .interrupt line {
+  stroke-dasharray: 5 4;
+}
+
+.diagram .busLabel {
+  fill: var(--muted);
+  font-size: 10px;
+}
+
+.diagram .bus.on .busLabel {
+  fill: var(--on);
+}
+
+/* --- step description ------------------------------------------------------------- */
+.stepBox {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin-top: 16px;
+  min-height: 140px;
+}
+
+.stepCount {
+  margin: 0;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+.stepBox h2 {
+  margin: 4px 0 8px;
+  font-size: 1.2rem;
+}
+
+.stepBox p {
+  margin: 0;
+}
+
+/* --- controls --------------------------------------------------------------------- */
+.controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 16px 0;
+}
+
+button,
+select {
+  font: inherit;
+  padding: 7px 14px;
+  border-radius: 7px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+}
+
+button:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+button.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  font-weight: 600;
+}
+
+button.primary:hover {
+  color: #fff;
+  filter: brightness(1.08);
+}
+
+/* --- bit toggler ------------------------------------------------------------------ */
+.bits {
+  display: flex;
+  gap: 6px;
+  margin: 24px 0 16px;
+  flex-wrap: wrap;
+}
+
+.bit {
+  flex: 1 1 60px;
+  min-width: 56px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 12px 4px 8px;
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+}
+
+.bitValue {
+  font-size: 1.7rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.bitWeight {
+  font-size: 0.7rem;
+  color: var(--muted);
+}
+
+.bit.one {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.bit.signBit {
+  border-style: dashed;
+}
+
+.bit.signBit.one {
+  background: var(--on-soft);
+  border-color: var(--on);
+  color: var(--on);
+}
+
+/* --- readout ---------------------------------------------------------------------- */
+.readout {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.readout > div {
+  flex: 1 1 150px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 16px;
+}
+
+.readoutLabel {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.readoutValue {
+  display: block;
+  font-size: 1.8rem;
+  font-weight: 700;
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+}
+
+/* --- the negate trick ------------------------------------------------------------- */
+.trick {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin-top: 16px;
+}
+
+.trick h2 {
+  margin-top: 0;
+  font-size: 1.1rem;
+}
+
+.trick table {
+  border-collapse: collapse;
+  margin-bottom: 12px;
+}
+
+.trick th {
+  text-align: left;
+  font-weight: 500;
+  color: var(--muted);
+  padding: 6px 16px 6px 0;
+  font-size: 0.9rem;
+}
+
+.trick td {
+  padding: 6px 16px 6px 0;
+}
+
+.mono {
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  letter-spacing: 0.08em;
+}
+
+/* --- forms ------------------------------------------------------------------------ */
+form {
+  display: grid;
+  gap: 6px;
+  max-width: 340px;
+  margin: 16px 0;
+}
+
+label {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+input {
+  font: inherit;
+  padding: 8px 10px;
+  border-radius: 7px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+}
+
+input:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+form button {
+  margin-top: 8px;
+  justify-self: start;
+}
+
+/* --- footers ---------------------------------------------------------------------- */
+.lessonLinks {
+  display: flex;
+  gap: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  margin-top: 24px;
+  flex-wrap: wrap;
+}
+
+.lessonLinks a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.siteFooter {
+  margin-top: 48px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}

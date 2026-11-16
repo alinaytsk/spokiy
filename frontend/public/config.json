@@ -1,0 +1,7 @@
+{
+  "_comment": "Placeholder for local development. The CDK deploy in infra/ overwrites this file in the built site with the real pool and API values, which is why nothing here may be baked in at build time.",
+  "apiUrl": "http://localhost:4000",
+  "region": "eu-central-1",
+  "userPoolId": "",
+  "userPoolClientId": ""
+}
