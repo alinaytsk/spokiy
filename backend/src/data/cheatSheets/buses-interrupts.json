@@ -1,0 +1,38 @@
+{
+  "topicId": "buses-interrupts",
+  "title": "Buses and interrupts",
+  "sections": [
+    {
+      "heading": "The three buses",
+      "points": [
+        "Address: where. Its width sets how much memory can be addressed (2^n).",
+        "Data: what. Its width sets how many bits move per transfer.",
+        "Control: when and which way - read, write, clock, interrupt request."
+      ]
+    },
+    {
+      "heading": "Three ways to do I/O",
+      "points": [
+        "Programmed (polling): the CPU asks repeatedly and wastes cycles.",
+        "Interrupt-driven: the device speaks when ready, but the CPU still moves each word.",
+        "DMA: a controller moves the whole block and interrupts once at the end."
+      ]
+    },
+    {
+      "heading": "What an interrupt does",
+      "points": [
+        "Finishes the current instruction first.",
+        "Saves the PC and the processor status.",
+        "Jumps through the vector table to the handler, then restores and resumes."
+      ]
+    },
+    {
+      "heading": "Traps the quiz likes",
+      "points": [
+        "Non-maskable interrupts ignore the disable flag - that is the whole point.",
+        "Interrupt-driven I/O frees the CPU from waiting, not from working.",
+        "Address bus width and data bus width answer different questions."
+      ]
+    }
+  ]
+}

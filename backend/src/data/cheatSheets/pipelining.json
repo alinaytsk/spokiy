@@ -1,0 +1,30 @@
+{
+  "topicId": "pipelining",
+  "title": "Pipelining",
+  "sections": [
+    {
+      "heading": "What it buys",
+      "points": [
+        "Throughput, not latency: one instruction is no faster, but more finish per second.",
+        "A k-stage pipeline holds k instructions at once.",
+        "Ideal speedup is k; real speedup is less, because of hazards."
+      ]
+    },
+    {
+      "heading": "The three hazards",
+      "points": [
+        "Structural: two instructions want the same hardware.",
+        "Data: an operand is not written back yet. Forwarding often fixes it.",
+        "Control: a branch, whose outcome is unknown when the next fetch happens."
+      ]
+    },
+    {
+      "heading": "Traps the quiz likes",
+      "points": [
+        "The clock period is set by the SLOWEST stage, not the average.",
+        "Deeper is not automatically better: branch penalties grow with depth.",
+        "Pipeline registers add delay of their own."
+      ]
+    }
+  ]
+}

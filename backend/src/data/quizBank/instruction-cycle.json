@@ -1,0 +1,79 @@
+{
+  "topicId": "instruction-cycle",
+  "questions": [
+    {
+      "id": "ic-1",
+      "prompt": "What is the order of the phases in one instruction cycle?",
+      "options": [
+        "Decode, fetch, execute",
+        "Fetch, decode, execute",
+        "Fetch, execute, decode",
+        "Execute, fetch, decode"
+      ],
+      "correctIndex": 1,
+      "explanation": "The CPU must have the instruction before it can work out what it is, and know what it is before it can carry it out. Fetch brings it from memory, decode works out the operation and operands, execute performs it."
+    },
+    {
+      "id": "ic-2",
+      "prompt": "Which register holds the address of the next instruction to be fetched?",
+      "options": [
+        "The instruction register (IR)",
+        "The memory data register (MDR)",
+        "The program counter (PC)",
+        "The accumulator (AC)"
+      ],
+      "correctIndex": 2,
+      "explanation": "The program counter holds an address, not an instruction. The IR holds the instruction itself once it has arrived."
+    },
+    {
+      "id": "ic-3",
+      "prompt": "During fetch, what is placed on the address bus?",
+      "options": [
+        "The contents of the MAR",
+        "The contents of the IR",
+        "The contents of the MDR",
+        "The opcode of the instruction"
+      ],
+      "correctIndex": 0,
+      "explanation": "The PC is copied into the memory address register, and it is the MAR that drives the address bus. The value coming back from memory lands in the MDR."
+    },
+    {
+      "id": "ic-4",
+      "prompt": "At what point in the cycle is the program counter incremented?",
+      "options": [
+        "After the instruction has finished executing",
+        "During fetch, before the instruction has been decoded",
+        "Only when the instruction is a jump",
+        "At the very end, during the interrupt check"
+      ],
+      "correctIndex": 1,
+      "explanation": "The PC is incremented during fetch, long before the CPU knows what the instruction does. This is why a jump instruction has to overwrite the PC during execute: by then it has already been pointed at the following instruction.",
+      "tricky": true
+    },
+    {
+      "id": "ic-5",
+      "prompt": "A device raises an interrupt halfway through the execute phase. When does the CPU react to it?",
+      "options": [
+        "Immediately, abandoning the half-finished instruction",
+        "After the current instruction has finished executing",
+        "Only when the current program ends",
+        "At the next fetch, interrupting the memory read"
+      ],
+      "correctIndex": 1,
+      "explanation": "The interrupt check is a separate phase that runs after execute. Letting an interrupt tear an instruction in half would leave registers and memory in a state nobody could restore, so the CPU finishes the instruction first and only then saves the PC and jumps to the handler.",
+      "tricky": true
+    },
+    {
+      "id": "ic-6",
+      "prompt": "What does the instruction register (IR) contain after the fetch phase?",
+      "options": [
+        "The address of the instruction",
+        "The result of the instruction",
+        "The instruction itself, still encoded",
+        "The decoded control signals"
+      ],
+      "correctIndex": 2,
+      "explanation": "Fetch copies the instruction into the IR as raw bits. Turning those bits into control signals is what the decode phase does next."
+    }
+  ]
+}

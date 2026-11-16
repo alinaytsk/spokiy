@@ -1,0 +1,32 @@
+{
+  "topicId": "instruction-cycle",
+  "title": "The instruction cycle",
+  "sections": [
+    {
+      "heading": "The four phases",
+      "points": [
+        "Fetch: PC -> MAR, memory read, result -> MDR -> IR, and PC incremented.",
+        "Decode: the control unit reads the opcode and works out the operands.",
+        "Execute: the ALU or the memory does the actual work.",
+        "Interrupt check: only after execute, never in the middle of it."
+      ]
+    },
+    {
+      "heading": "Registers worth knowing by name",
+      "points": [
+        "PC  - address of the NEXT instruction.",
+        "IR  - the current instruction, still encoded.",
+        "MAR - the address being put on the address bus.",
+        "MDR - the data travelling to or from memory."
+      ]
+    },
+    {
+      "heading": "Traps the quiz likes",
+      "points": [
+        "The PC is incremented during fetch, before anyone knows it was a jump.",
+        "A jump works by overwriting the PC during execute.",
+        "An interrupt never splits an instruction in half."
+      ]
+    }
+  ]
+}

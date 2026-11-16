@@ -1,0 +1,64 @@
+{
+  "topicId": "cache-memory-hierarchy",
+  "questions": [
+    {
+      "id": "cm-1",
+      "prompt": "Why is memory arranged as a hierarchy rather than as one large fast memory?",
+      "options": [
+        "Because programs cannot address more than a few megabytes",
+        "Because fast memory is expensive per byte, so only a little of it is affordable",
+        "Because the CPU can only talk to one memory at a time",
+        "Because the operating system requires it"
+      ],
+      "correctIndex": 1,
+      "explanation": "Speed costs money and space. The hierarchy buys the illusion of a memory that is both large and fast by keeping the data currently in use in the small fast levels."
+    },
+    {
+      "id": "cm-2",
+      "prompt": "A program reads an array from start to end. Which principle makes the cache effective here?",
+      "options": ["Temporal locality", "Spatial locality", "Write-back policy", "Associativity"],
+      "correctIndex": 1,
+      "explanation": "Spatial locality: addresses close to one just used are likely to be used soon. A cache line brings in several neighbouring words at once, so one miss pays for many hits."
+    },
+    {
+      "id": "cm-3",
+      "prompt": "What is a write-back cache?",
+      "options": [
+        "Every write goes to cache and to memory at the same time",
+        "Writes go only to the cache; memory is updated when the line is evicted",
+        "Writes bypass the cache entirely",
+        "Writes are buffered and discarded on a miss"
+      ],
+      "correctIndex": 1,
+      "explanation": "Write-back delays the memory write until eviction, which saves bus traffic when a line is written repeatedly. The cost is a dirty bit per line and a harder time keeping multiple caches coherent."
+    },
+    {
+      "id": "cm-4",
+      "prompt": "A cache has a 95% hit rate, 1 ns hit time and 100 ns miss penalty. What is the average access time?",
+      "options": ["1 ns", "5 ns", "6 ns", "100 ns"],
+      "correctIndex": 2,
+      "explanation": "1 + 0.05 x 100 = 6 ns. The lesson is how heavily the rare miss dominates: at a 95% hit rate the cache is still six times slower than its hit time, and going from 95% to 99% nearly halves the average.",
+      "tricky": true
+    },
+    {
+      "id": "cm-5",
+      "prompt": "Increasing the cache line size always improves the hit rate.",
+      "options": [
+        "True: more data is fetched per miss",
+        "False: beyond a point it wastes bandwidth and evicts useful data",
+        "True, provided the cache is direct-mapped",
+        "False, because line size cannot be changed"
+      ],
+      "correctIndex": 1,
+      "explanation": "Longer lines exploit spatial locality up to a point, but a fixed-size cache then holds fewer lines, so unrelated data is evicted sooner and each miss transfers more bytes the program may never touch. The hit rate curve turns back down.",
+      "tricky": true
+    },
+    {
+      "id": "cm-6",
+      "prompt": "In a direct-mapped cache, how many places can a given memory block be stored?",
+      "options": ["Exactly one", "Two", "Any free line", "One per way"],
+      "correctIndex": 0,
+      "explanation": "Direct-mapped means the block's address decides its line. It is the cheapest to build and the fastest to look up, but two hot blocks that map to the same line will evict each other for ever - a conflict miss."
+    }
+  ]
+}

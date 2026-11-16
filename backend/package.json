@@ -1,0 +1,21 @@
+{
+  "name": "spokiy-backend",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "API for sPOKiy: topics, cheat sheets, quizzes, progress, requests and feedback.",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "node --watch src/server.js",
+    "start": "node src/server.js",
+    "test": "node --test test/"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.726.0",
+    "@aws-sdk/lib-dynamodb": "^3.726.0",
+    "aws-jwt-verify": "^4.0.1",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "serverless-http": "^3.2.0"
+  }
+}

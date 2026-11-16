@@ -1,0 +1,38 @@
+{
+  "topicId": "number-representation",
+  "title": "Number representation",
+  "sections": [
+    {
+      "heading": "Two's complement in one line",
+      "points": [
+        "Negate by flipping every bit and adding one.",
+        "The top bit has weight -2^(n-1); the rest are positive as usual.",
+        "n bits cover -2^(n-1) .. +2^(n-1)-1, so 8 bits give -128 .. +127."
+      ]
+    },
+    {
+      "heading": "Why it won",
+      "points": [
+        "One zero, not two (sign-and-magnitude has +0 and -0).",
+        "a - b is just a + (-b), so one adder does both operations.",
+        "Negation is a row of inverters plus a carry-in of 1."
+      ]
+    },
+    {
+      "heading": "Patterns worth recognising",
+      "points": [
+        "11111111 = -1 at any width.",
+        "10000000 = -128 in 8 bits: the most negative value, with no positive twin.",
+        "Sign extension copies the sign bit into the new high bits."
+      ]
+    },
+    {
+      "heading": "Traps the quiz likes",
+      "points": [
+        "Overflow and carry are different flags.",
+        "Two positives giving a negative is signed overflow.",
+        "Widening a negative byte with zeros turns it into a big positive number."
+      ]
+    }
+  ]
+}

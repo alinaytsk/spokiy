@@ -1,0 +1,69 @@
+{
+  "topicId": "number-representation",
+  "questions": [
+    {
+      "id": "nr-1",
+      "prompt": "What range of values can an 8-bit two's complement number represent?",
+      "options": ["-127 to +127", "-128 to +127", "0 to 255", "-128 to +128"],
+      "correctIndex": 1,
+      "explanation": "Eight bits give 256 patterns. Two's complement has exactly one zero, so the range is not symmetric: it runs from -128 up to +127."
+    },
+    {
+      "id": "nr-2",
+      "prompt": "How do you negate a two's complement number?",
+      "options": [
+        "Flip the sign bit",
+        "Flip every bit",
+        "Flip every bit, then add one",
+        "Subtract it from 255"
+      ],
+      "correctIndex": 2,
+      "explanation": "Flipping every bit gives the one's complement; adding one gives two's complement. Flipping only the sign bit is sign-and-magnitude, which is a different representation."
+    },
+    {
+      "id": "nr-3",
+      "prompt": "What decimal value does the 8-bit two's complement pattern 11111111 represent?",
+      "options": ["255", "-1", "-127", "-128"],
+      "correctIndex": 1,
+      "explanation": "Flip the bits to get 00000000, add one to get 00000001 = 1, so the original is -1. All-ones is -1 in two's complement at any width, which is why it is a handy mask."
+    },
+    {
+      "id": "nr-4",
+      "prompt": "Why does two's complement let the same adder circuit do subtraction?",
+      "options": [
+        "Because subtraction is detected by the control unit and routed elsewhere",
+        "Because a - b is computed as a + (-b), and negation is cheap",
+        "Because the sign bit is ignored during addition",
+        "Because the carry out is discarded"
+      ],
+      "correctIndex": 1,
+      "explanation": "This is the whole reason the representation won. Negating is flip-and-add-one, which is a row of inverters and a carry-in of 1, so one adder handles both operations and no separate subtractor is needed."
+    },
+    {
+      "id": "nr-5",
+      "prompt": "Adding the 8-bit two's complement numbers 01111111 and 00000001 gives 10000000. What has happened?",
+      "options": [
+        "Nothing unusual: the result is 128",
+        "Signed overflow: two positives produced a negative",
+        "A carry out of the top bit, which is always an error",
+        "Underflow, because the result is too small"
+      ],
+      "correctIndex": 1,
+      "explanation": "127 + 1 cannot fit in eight signed bits, so the result wraps to -128. The giveaway is the sign: adding two positive numbers must give a positive number, and it did not. Note there is no carry out of the top bit here - overflow and carry are different flags.",
+      "tricky": true
+    },
+    {
+      "id": "nr-6",
+      "prompt": "An 8-bit value 10110100 is copied into a 16-bit register. What should the top eight bits be set to if the value is signed?",
+      "options": [
+        "All zeros, because the value is being widened",
+        "All ones, copying the sign bit",
+        "The same byte repeated",
+        "Whatever was already in the register"
+      ],
+      "correctIndex": 1,
+      "explanation": "This is sign extension. The value is negative, so the sign bit of 1 is copied across the new high bits to preserve it. Filling with zeros instead would turn a small negative number into a large positive one - the classic bug when a signed byte is widened as if it were unsigned.",
+      "tricky": true
+    }
+  ]
+}
