@@ -21,8 +21,7 @@
       "heading": "Numbers to be able to compute",
       "points": [
         "Average access = hit time + miss rate x miss penalty.",
-        "At 95% hits, 1 ns hit and 100 ns penalty, the average is 6 ns, not 1.",
-        "Misses are classified as compulsory, capacity or conflict."
+        "At 95% hits, 1 ns hit and 100 ns penalty, the average is 6 ns, not 1."
       ]
     },
     {

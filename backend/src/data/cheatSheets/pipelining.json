@@ -7,7 +7,7 @@
       "points": [
         "Throughput, not latency: one instruction is no faster, but more finish per second.",
         "A k-stage pipeline holds k instructions at once.",
-        "Ideal speedup is k; real speedup is less, because of hazards."
+        "Ideal speedup is n·k / (k + n − 1), which approaches k for a long stream; hazards make it less."
       ]
     },
     {
