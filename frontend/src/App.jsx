@@ -1,17 +1,22 @@
 // Routes and the shell around them.
 //
-// Only two lesson routes point at real components - the two I own. The rest render
-// <Placeholder> and are the lines my teammates replace with their own pages.
+// Lesson routes that still render <Placeholder> are the lines a teammate replaces with
+// their own page.
 
 import { Link, Route, Routes } from 'react-router-dom';
 
 import { useAuth } from './auth/context.js';
 import ProtectedRoute from './auth/ProtectedRoute.jsx';
 import Home from './pages/Home.jsx';
+import CheatSheet from './pages/CheatSheet.jsx';
 import Placeholder from './pages/Placeholder.jsx';
+import Progress from './pages/Progress.jsx';
+import Quiz from './pages/Quiz.jsx';
 import SignIn from './pages/SignIn.jsx';
 import SignUp from './pages/SignUp.jsx';
+import CacheHitMiss from './pages/topics/CacheHitMiss.jsx';
 import InstructionCycle from './pages/topics/InstructionCycle.jsx';
+import MemoryHierarchy from './pages/topics/MemoryHierarchy.jsx';
 import NumberRepresentation from './pages/topics/NumberRepresentation.jsx';
 
 function Nav() {
@@ -23,6 +28,7 @@ function Nav() {
         sPOKiy
       </Link>
       <span className="spacer" />
+      <Link to="/quiz/practice">Practice</Link>
       <Link to="/cheat-sheet">Cheat sheets</Link>
       <Link to="/progress">Progress</Link>
 
@@ -58,38 +64,25 @@ export function App() {
           <Route path="/topics/instruction-cycle" element={<InstructionCycle />} />
           <Route path="/topics/number-representation" element={<NumberRepresentation />} />
 
-          {/* --- teammates' lessons: replace these three ------------------------------- */}
+          {/* --- Mykhailo's lessons: the cache topic, in two parts ---------------------- */}
+          <Route path="/topics/cache-memory-hierarchy" element={<MemoryHierarchy />} />
+          <Route path="/topics/cache-memory-hierarchy/cache" element={<CacheHitMiss />} />
+
+          {/* --- teammates' lessons: replace these two --------------------------------- */}
           <Route path="/topics/pipelining" element={<Placeholder what="Pipelining lesson" />} />
-          <Route
-            path="/topics/cache-memory-hierarchy"
-            element={<Placeholder what="Cache and memory hierarchy lesson" />}
-          />
           <Route
             path="/topics/buses-interrupts"
             element={<Placeholder what="Buses and interrupts lesson" />}
           />
 
-          {/* --- teammates' pages ------------------------------------------------------ */}
-          <Route
-            path="/quiz/:topicId"
-            element={
-              <Placeholder
-                what="Quiz"
-                api="GET /topics/:id/quiz · POST /topics/:id/quiz/grade"
-              />
-            }
-          />
-          <Route
-            path="/cheat-sheet"
-            element={<Placeholder what="Cheat sheets" api="GET /topics/:id/cheat-sheet" />}
-          />
+          {/* --- quiz and cheat sheets (Mykhailo) -------------------------------------- */}
+          {/* /quiz/practice is a random mix of every topic; see Quiz.jsx. */}
+          <Route path="/quiz/:topicId" element={<Quiz />} />
+          <Route path="/cheat-sheet" element={<CheatSheet />} />
 
           {/* Progress needs a signed-in user: the API reads the token to know whose it is. */}
           <Route element={<ProtectedRoute />}>
-            <Route
-              path="/progress"
-              element={<Placeholder what="Your progress" api="GET/POST /progress" />}
-            />
+            <Route path="/progress" element={<Progress />} />
           </Route>
 
           {/* --- auth ------------------------------------------------------------------ */}

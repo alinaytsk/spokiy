@@ -5,26 +5,36 @@
       "id": "pl-1",
       "prompt": "What does pipelining improve?",
       "options": [
-        "The latency of a single instruction",
         "The throughput of a stream of instructions",
+        "The latency of a single instruction",
         "The clock speed of the processor",
         "The size of the instruction set"
       ],
-      "correctIndex": 1,
+      "correctIndex": 0,
       "explanation": "One instruction still takes as long to travel through all the stages - slightly longer, in fact, because of the pipeline registers. What improves is how many instructions finish per second."
     },
     {
       "id": "pl-2",
       "prompt": "A five-stage pipeline is running with no stalls. How many instructions are in flight at once?",
-      "options": ["One", "Two", "Five", "It depends on the clock speed"],
-      "correctIndex": 2,
+      "options": [
+        "One",
+        "Five",
+        "Two",
+        "It depends on the clock speed"
+      ],
+      "correctIndex": 1,
       "explanation": "Each stage holds a different instruction, so a full five-stage pipeline has five instructions in progress simultaneously, each at a different point."
     },
     {
       "id": "pl-3",
       "prompt": "An instruction needs a register that the previous instruction has not written back yet. What kind of hazard is this?",
-      "options": ["Structural hazard", "Data hazard", "Control hazard", "Cache miss"],
-      "correctIndex": 1,
+      "options": [
+        "Structural hazard",
+        "Control hazard",
+        "Data hazard",
+        "Cache miss"
+      ],
+      "correctIndex": 2,
       "explanation": "A data hazard: the data is not ready. Forwarding can often supply the value straight from the ALU output rather than waiting for write-back."
     },
     {
@@ -32,18 +42,23 @@
       "prompt": "Why is a branch a problem for a pipeline?",
       "options": [
         "Branches take more clock cycles than other instructions",
-        "The next instructions are fetched before the branch outcome is known",
         "Branches cannot be decoded in the usual stage",
-        "Branches always cause a cache miss"
+        "Branches always cause a cache miss",
+        "The next instructions are fetched before the branch outcome is known"
       ],
-      "correctIndex": 1,
+      "correctIndex": 3,
       "explanation": "By the time the branch resolves, the pipeline has already fetched instructions from the wrong path. They must be flushed, and the work is lost. This is a control hazard, and it is why branch prediction matters."
     },
     {
       "id": "pl-5",
       "prompt": "A 5-stage pipeline has stages taking 2, 3, 2, 4 and 2 ns. What is the fastest clock period the pipeline can run at?",
-      "options": ["2 ns", "2.6 ns", "4 ns", "13 ns"],
-      "correctIndex": 2,
+      "options": [
+        "4 ns",
+        "2 ns",
+        "2.6 ns",
+        "13 ns"
+      ],
+      "correctIndex": 0,
       "explanation": "Every stage shares one clock, so the period is set by the slowest stage, not by the average and not by the total. The 4 ns stage sets the pace, and the other stages idle for part of each cycle. Balancing stages is therefore as important as adding them.",
       "tricky": true
     },

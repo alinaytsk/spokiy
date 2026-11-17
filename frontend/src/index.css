@@ -488,6 +488,669 @@ form button {
   justify-self: start;
 }
 
+/* --- shared status colours ------------------------------------------------------- */
+.good {
+  color: var(--good);
+}
+
+.bad {
+  color: var(--bad);
+}
+
+/* --- quiz ------------------------------------------------------------------------- */
+.quiz header h1,
+.progressPage header h1,
+.cheatPage header h1 {
+  margin: 0 0 8px;
+  font-size: 2rem;
+  letter-spacing: -0.02em;
+}
+
+.quizMeter {
+  display: flex;
+  gap: 4px;
+  margin: 20px 0 12px;
+}
+
+.quizMeter span {
+  flex: 1;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--border);
+}
+
+.quizMeter span.now {
+  background: var(--accent);
+}
+
+.quizMeter span.good {
+  background: var(--good);
+}
+
+.quizMeter span.bad {
+  background: var(--bad);
+}
+
+.questionCard {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px 20px;
+}
+
+.questionCard h2 {
+  margin: 4px 0 16px;
+  font-size: 1.2rem;
+  line-height: 1.4;
+}
+
+.options {
+  display: grid;
+  gap: 8px;
+}
+
+.option {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  text-align: left;
+  padding: 10px 14px;
+  line-height: 1.4;
+}
+
+.option:disabled {
+  opacity: 1;
+  cursor: default;
+}
+
+.optionLetter {
+  flex: none;
+  width: 1.6em;
+  height: 1.6em;
+  border-radius: 50%;
+  display: inline-grid;
+  place-items: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  background: var(--bg);
+  border: 1px solid var(--border);
+}
+
+.option.picked {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.option.good {
+  border-color: var(--good);
+  background: color-mix(in srgb, var(--good) 12%, var(--surface));
+}
+
+.option.bad {
+  border-color: var(--bad);
+  background: color-mix(in srgb, var(--bad) 12%, var(--surface));
+}
+
+.feedback {
+  margin-top: 14px;
+  padding: 10px 14px;
+  border-radius: 0 6px 6px 0;
+  border-left: 3px solid;
+  font-size: 0.95rem;
+}
+
+.feedback.good {
+  border-color: var(--good);
+  background: color-mix(in srgb, var(--good) 10%, var(--surface));
+  color: var(--text);
+}
+
+.feedback.bad {
+  border-color: var(--bad);
+  background: color-mix(in srgb, var(--bad) 10%, var(--surface));
+  color: var(--text);
+}
+
+.reviewList {
+  padding-left: 1.2em;
+  display: grid;
+  gap: 10px;
+}
+
+.reviewList li {
+  color: var(--text);
+}
+
+.reviewList p {
+  margin: 0;
+}
+
+.reviewList li.good .reviewPrompt span {
+  color: var(--good);
+}
+
+.reviewList li.bad .reviewPrompt span {
+  color: var(--bad);
+}
+
+.readoutValue.good,
+.readoutValue .good {
+  color: var(--good);
+}
+
+.readoutValue.bad,
+.readoutValue .bad {
+  color: var(--bad);
+}
+
+/* --- progress --------------------------------------------------------------------- */
+.progressBar {
+  display: flex;
+  gap: 4px;
+  margin: 20px 0 16px;
+}
+
+.progressBar span {
+  flex: 1;
+  height: 10px;
+  border-radius: 5px;
+  background: var(--border);
+}
+
+.progressBar .done {
+  background: var(--good);
+}
+
+.progressBar .weak {
+  background: var(--bad);
+}
+
+.progressBar .visited {
+  background: var(--accent);
+}
+
+.progressList {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0 0;
+  display: grid;
+  gap: 12px;
+}
+
+.progressList li {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 20px;
+}
+
+.progressList li.done {
+  border-left-color: var(--good);
+}
+
+.progressList li.weak {
+  border-left-color: var(--bad);
+}
+
+.progressList li.visited {
+  border-left-color: var(--accent);
+}
+
+.progressList p {
+  margin: 4px 0 0;
+}
+
+.progressHead {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.progressHead h2 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.progressHead h2 a {
+  color: var(--text);
+  text-decoration: none;
+}
+
+.badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.badge.done {
+  color: var(--good);
+  border-color: var(--good);
+}
+
+.badge.weak {
+  color: var(--bad);
+  border-color: var(--bad);
+}
+
+.badge.visited {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.scoreTrack {
+  position: relative;
+  height: 8px;
+  margin: 10px 0 2px;
+  border-radius: 4px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+}
+
+.scoreTrack span {
+  display: block;
+  height: 100%;
+  border-radius: 4px;
+  background: var(--accent);
+}
+
+.weak .scoreTrack span {
+  background: var(--bad);
+}
+
+.done .scoreTrack span {
+  background: var(--good);
+}
+
+/* the 60% line */
+.scoreTrack i {
+  position: absolute;
+  top: -4px;
+  bottom: -4px;
+  width: 2px;
+  background: var(--muted);
+}
+
+.progressActions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-size: 0.9rem;
+}
+
+.progressActions a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+/* --- cheat sheets ----------------------------------------------------------------- */
+.cheatIndex {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 16px 0;
+}
+
+.cheatIndex a {
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  text-decoration: none;
+  font-size: 0.85rem;
+}
+
+.cheatIndex a:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.cheatGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr));
+  gap: 14px;
+}
+
+.cheatCard {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 20px;
+  scroll-margin-top: 16px;
+}
+
+.cheatCard h2 {
+  margin: 0 0 4px;
+  font-size: 1.15rem;
+}
+
+.cheatSummary {
+  margin: 0 0 8px;
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.cheatSection h3 {
+  margin: 12px 0 4px;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+.cheatSection ul {
+  margin: 0;
+  padding-left: 1.1em;
+  font-size: 0.93rem;
+}
+
+@media print {
+  .nav,
+  .siteFooter,
+  .cheatIndex,
+  .cheatCard .progressActions {
+    display: none;
+  }
+
+  .cheatCard {
+    break-inside: avoid;
+  }
+}
+
+/* --- memory hierarchy pyramid ----------------------------------------------------- */
+.pyramid .tier {
+  cursor: pointer;
+  outline: none;
+}
+
+.pyramid .tier polygon {
+  fill: var(--accent-soft);
+  stroke: var(--accent);
+  stroke-width: 1.2;
+  transition: fill 0.2s, stroke 0.2s;
+}
+
+.pyramid .tier.persistent polygon {
+  fill: var(--bg);
+  stroke: var(--muted);
+}
+
+.pyramid .tier:hover polygon,
+.pyramid .tier:focus-visible polygon {
+  stroke-width: 2.5;
+}
+
+.pyramid .tier.on polygon {
+  fill: var(--on-soft);
+  stroke: var(--on);
+  stroke-width: 2.5;
+}
+
+.pyramid .tierName {
+  fill: var(--text);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.pyramid .tierMeta {
+  fill: var(--muted);
+  font-size: 11px;
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+}
+
+.pyramid .tier.on .tierMeta {
+  fill: var(--on);
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 4px 16px;
+  margin: 0 0 10px;
+}
+
+.facts dt {
+  color: var(--muted);
+  font-size: 0.85rem;
+  padding-top: 0.1em;
+}
+
+.facts dd {
+  margin: 0;
+}
+
+.latencyBars {
+  display: grid;
+  gap: 4px;
+  margin: 8px 0 14px;
+}
+
+.latencyRow {
+  display: grid;
+  grid-template-columns: 7.5em 1fr 6.5em;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 8px;
+  border-color: transparent;
+  background: none;
+  text-align: left;
+  font-size: 0.85rem;
+}
+
+.latencyRow.on {
+  border-color: var(--on);
+  background: var(--on-soft);
+}
+
+.latencyTrack {
+  height: 10px;
+  border-radius: 5px;
+  background: var(--bg);
+  /* one gridline per factor of ten, matching the log scale in MemoryHierarchy.jsx */
+  background-image: repeating-linear-gradient(
+    to right,
+    var(--border) 0 1px,
+    transparent 1px calc(100% / 9)
+  );
+}
+
+.latencyTrack span {
+  display: block;
+  height: 100%;
+  border-radius: 5px;
+  background: var(--accent);
+}
+
+.latencyRow.on .latencyTrack span {
+  background: var(--on);
+}
+
+.latencyValue {
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  text-align: right;
+}
+
+/* --- cache simulator -------------------------------------------------------------- */
+.settings {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin: 20px 0 4px;
+}
+
+.settings label {
+  display: grid;
+  gap: 4px;
+}
+
+.addressForm {
+  max-width: none;
+}
+
+.addressForm > div {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.addressForm input {
+  flex: 1 1 240px;
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+}
+
+.addressForm button {
+  margin-top: 0;
+}
+
+.accessStrip {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.accessStrip button {
+  min-width: 2.6em;
+  padding: 4px 6px;
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 0.85rem;
+}
+
+.accessStrip .good button {
+  border-color: var(--good);
+  color: var(--good);
+}
+
+.accessStrip .bad button {
+  border-color: var(--bad);
+  color: var(--bad);
+}
+
+.accessStrip .now button {
+  outline: 2px solid var(--on);
+  outline-offset: 1px;
+  font-weight: 700;
+}
+
+.addressSplit {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin-bottom: 12px;
+}
+
+.bitsSplit {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+  flex-wrap: wrap;
+}
+
+.bitsSplit > span {
+  display: grid;
+  justify-items: center;
+  padding: 6px 12px;
+  border-radius: 7px;
+  border: 1px solid;
+}
+
+.bitsSplit b {
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 1.4rem;
+  letter-spacing: 0.15em;
+}
+
+.bitsSplit small {
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+.tagBits {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.indexBits {
+  border-color: var(--on);
+  background: var(--on-soft);
+}
+
+.offsetBits {
+  border-color: var(--border);
+  background: var(--bg);
+}
+
+.cacheTableWrap {
+  overflow-x: auto;
+}
+
+.cacheTable {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 4px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 6px;
+}
+
+.cacheTable th {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-align: left;
+  padding: 4px 8px;
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+}
+
+.cacheTable td {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 10px;
+  background: var(--bg);
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.cacheTable tr.activeSet th {
+  color: var(--on);
+}
+
+.cacheTable td.empty {
+  opacity: 0.55;
+}
+
+.cacheTable td.good {
+  border-color: var(--good);
+  background: color-mix(in srgb, var(--good) 14%, var(--surface));
+}
+
+.cacheTable td.bad {
+  border-color: var(--bad);
+  background: color-mix(in srgb, var(--bad) 14%, var(--surface));
+}
+
+.lineTag,
+.lineData {
+  display: block;
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 0.82rem;
+}
+
+.lineTag {
+  color: var(--accent);
+}
+
 /* --- footers ---------------------------------------------------------------------- */
 .lessonLinks {
   display: flex;

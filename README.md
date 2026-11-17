@@ -23,8 +23,9 @@ infra/      AWS CDK: Cognito, DynamoDB, Lambda, the static site  (see infra/READ
 | Frontend scaffold, Cognito auth, API client | Alina | done |
 | Lesson: the instruction cycle | Alina | done |
 | Lesson: number representation | Alina | done |
-| Lessons: pipelining, cache/memory, buses/interrupts | teammate | placeholder routes in `App.jsx` |
-| Quiz page, progress page, cheat-sheet page | teammate | placeholder routes in `App.jsx` |
+| Lessons: memory hierarchy, cache hits and misses | Mykhailo | done |
+| Quiz page (per topic + random practice), progress page, cheat-sheet page | Mykhailo | done |
+| Lessons: pipelining, buses/interrupts | teammate | placeholder routes in `App.jsx` |
 | CDK stack and deploy | teammate | `infra/` |
 
 Every placeholder is a single `<Route>` in [`frontend/src/App.jsx`](frontend/src/App.jsx)
