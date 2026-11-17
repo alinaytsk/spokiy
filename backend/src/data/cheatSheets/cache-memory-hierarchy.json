@@ -26,6 +26,14 @@
       ]
     },
     {
+      "heading": "Splitting an address",
+      "points": [
+        "offset = log2(block size), index = log2(number of sets), tag = everything left.",
+        "Direct-mapped: one line per set. Fully associative: one set, no index bits.",
+        "Three kinds of miss: compulsory (first touch), capacity (cache too small), conflict (wrong mapping)."
+      ]
+    },
+    {
       "heading": "Traps the quiz likes",
       "points": [
         "Longer cache lines stop helping and start hurting.",

@@ -18,13 +18,13 @@ export const topics = [
   {
     id: 'pipelining',
     title: 'Pipelining',
-    owner: 'tbd',
+    owner: 'sofia',
     cheatSheet: 'Overlap the stages of consecutive instructions; hazards are the price.',
   },
   {
     id: 'cache-memory-hierarchy',
     title: 'Cache and the memory hierarchy',
-    owner: 'tbd',
+    owner: 'mykhailo',
     cheatSheet: 'Small and fast close to the CPU, large and slow far from it, locality in between.',
   },
   {

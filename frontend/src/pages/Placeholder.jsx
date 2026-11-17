@@ -8,14 +8,7 @@
 //
 // Still to be built, and by whom:
 //
-//   /topics/pipelining               lesson      (teammate)
-//   /topics/cache-memory-hierarchy   lesson      (teammate)
 //   /topics/buses-interrupts         lesson      (teammate)
-//   /quiz/:topicId                   quiz page   (teammate) - API is ready:
-//                                                GET  /topics/:id/quiz
-//                                                POST /topics/:id/quiz/grade
-//   /progress                        progress    (teammate) - GET/POST /progress, auth required
-//   /cheat-sheet                     cheat sheet (teammate) - GET /topics/:id/cheat-sheet
 
 import { Link, useParams } from 'react-router-dom';
 
