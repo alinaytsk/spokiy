@@ -10,7 +10,7 @@ import { api } from '../lib/api.js';
 
 // The lessons that actually exist. Everything else routes to a placeholder until the
 // teammate who owns it pushes their page.
-const BUILT = new Set(['instruction-cycle', 'number-representation']);
+const BUILT = new Set(['instruction-cycle', 'number-representation', 'pipelining']);
 
 export function Home() {
   const [topics, setTopics] = useState([]);

@@ -509,3 +509,293 @@ form button {
   padding-top: 16px;
   border-top: 1px solid var(--border);
 }
+
+/* --- pipelining lesson ------------------------------------------------------------ */
+.pipeConfig {
+  display: flex;
+  gap: 16px 24px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  margin: 20px 0 8px;
+}
+
+.pipeConfig > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.configLabel {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+button.toggle {
+  min-width: 64px;
+}
+
+button.toggle.on {
+  background: var(--on-soft);
+  border-color: var(--on);
+  color: var(--on);
+  font-weight: 600;
+}
+
+.program {
+  margin: 12px 0 20px;
+  padding-left: 1.6em;
+  display: grid;
+  gap: 4px;
+}
+
+.stageRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
+  gap: 8px;
+}
+
+.stageBox {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-height: 112px;
+  padding: 10px 12px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  transition: background 0.25s, border-color 0.25s;
+}
+
+.stageId {
+  font-weight: 700;
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+}
+
+.stageName {
+  font-size: 0.72rem;
+  color: var(--muted);
+  line-height: 1.3;
+  flex: 1;
+}
+
+.stageContent {
+  font-size: 0.95rem;
+}
+
+.stageBox.busy {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+}
+
+.stageBox.stalled {
+  background: var(--on-soft);
+  border-color: var(--on);
+}
+
+.stageBox.stalled .stageContent::after {
+  content: ' (waiting)';
+  font-size: 0.75rem;
+  color: var(--on);
+}
+
+.stageBox.bubble {
+  border-style: dashed;
+  border-color: var(--on);
+  color: var(--on);
+  background: repeating-linear-gradient(
+    45deg,
+    transparent 0 6px,
+    var(--on-soft) 6px 12px
+  );
+}
+
+.stepBox p + p {
+  margin-top: 8px;
+}
+
+.sectionTitle {
+  font-size: 1.2rem;
+  margin: 32px 0 4px;
+}
+
+.timingWrap {
+  overflow-x: auto;
+  margin: 12px 0 20px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+}
+
+.timing {
+  border-collapse: collapse;
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 0.8rem;
+  min-width: 100%;
+}
+
+.timing th,
+.timing td {
+  border: 1px solid var(--border);
+  padding: 6px 4px;
+  text-align: center;
+  min-width: 40px;
+}
+
+.timing tbody th {
+  text-align: left;
+  padding: 6px 10px;
+  position: sticky;
+  left: 0;
+  background: var(--surface);
+}
+
+.timing thead th:first-child {
+  text-align: left;
+  padding: 6px 10px;
+  font-family: system-ui, sans-serif;
+  font-weight: 500;
+  color: var(--muted);
+  position: sticky;
+  left: 0;
+  background: var(--surface);
+}
+
+.timing td.work {
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.timing td.stall {
+  color: var(--on);
+  background: repeating-linear-gradient(
+    45deg,
+    var(--on-soft) 0 5px,
+    transparent 5px 10px
+  );
+}
+
+.timing td.future {
+  opacity: 0.35;
+}
+
+.timing .now {
+  outline: 2px solid var(--on);
+  outline-offset: -2px;
+}
+
+.cycleButton {
+  padding: 2px 6px;
+  border: none;
+  background: transparent;
+  font: inherit;
+  color: var(--muted);
+}
+
+.timing th.now .cycleButton {
+  color: var(--on);
+  font-weight: 700;
+}
+
+.trick ul {
+  margin: 0;
+  padding-left: 1.2em;
+  display: grid;
+  gap: 8px;
+}
+
+/* --- request form ----------------------------------------------------------------- */
+.requestGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+  align-items: start;
+}
+
+.requestGrid h2 {
+  margin: 0 0 8px;
+  font-size: 1.15rem;
+}
+
+.requestForm {
+  max-width: none;
+  margin: 0;
+}
+
+.requestForm fieldset {
+  border: none;
+  padding: 0;
+  margin: 0 0 8px;
+  display: grid;
+  gap: 6px;
+}
+
+.requestForm legend {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+label.choice {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  color: var(--text);
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+label.choice input {
+  margin-top: 0.3em;
+  accent-color: var(--accent);
+}
+
+label.choice.donate {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.requestForm .muted {
+  margin: 0;
+}
+
+.tally {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 14px;
+}
+
+.tally p {
+  margin: 2px 0 0;
+}
+
+.tallyHead {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.tallyCount {
+  font-weight: 700;
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+}
+
+.tallyBar {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  margin-top: 4px;
+  overflow: hidden;
+}
+
+.tallyBar span {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+  border-radius: 999px;
+  transition: width 0.3s;
+}

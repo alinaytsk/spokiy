@@ -18,7 +18,7 @@ export const topics = [
   {
     id: 'pipelining',
     title: 'Pipelining',
-    owner: 'tbd',
+    owner: 'sofia',
     cheatSheet: 'Overlap the stages of consecutive instructions; hazards are the price.',
   },
   {

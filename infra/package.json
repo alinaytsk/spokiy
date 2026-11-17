@@ -1,0 +1,21 @@
+{
+  "name": "spokiy-infra",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "AWS CDK stack for sPOKiy: Cognito, DynamoDB, Lambda + HTTP API, S3 + CloudFront.",
+  "scripts": {
+    "build:app": "npm --prefix ../backend ci --omit=dev && npm --prefix ../frontend ci && npm --prefix ../frontend run build",
+    "synth": "cdk synth",
+    "diff": "cdk diff",
+    "deploy": "npm run build:app && cdk deploy --outputs-file cdk-outputs.json",
+    "destroy": "cdk destroy"
+  },
+  "dependencies": {
+    "aws-cdk-lib": "^2.200.0",
+    "constructs": "^10.4.2"
+  },
+  "devDependencies": {
+    "aws-cdk": "^2.1000.0"
+  }
+}

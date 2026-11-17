@@ -9,10 +9,12 @@ import { useAuth } from './auth/context.js';
 import ProtectedRoute from './auth/ProtectedRoute.jsx';
 import Home from './pages/Home.jsx';
 import Placeholder from './pages/Placeholder.jsx';
+import RequestTopic from './pages/RequestTopic.jsx';
 import SignIn from './pages/SignIn.jsx';
 import SignUp from './pages/SignUp.jsx';
 import InstructionCycle from './pages/topics/InstructionCycle.jsx';
 import NumberRepresentation from './pages/topics/NumberRepresentation.jsx';
+import Pipelining from './pages/topics/Pipelining.jsx';
 
 function Nav() {
   const { user, signOut, configured } = useAuth();
@@ -25,6 +27,7 @@ function Nav() {
       <span className="spacer" />
       <Link to="/cheat-sheet">Cheat sheets</Link>
       <Link to="/progress">Progress</Link>
+      <Link to="/requests">Request a topic</Link>
 
       {user ? (
         <>
@@ -58,8 +61,9 @@ export function App() {
           <Route path="/topics/instruction-cycle" element={<InstructionCycle />} />
           <Route path="/topics/number-representation" element={<NumberRepresentation />} />
 
-          {/* --- teammates' lessons: replace these three ------------------------------- */}
-          <Route path="/topics/pipelining" element={<Placeholder what="Pipelining lesson" />} />
+          <Route path="/topics/pipelining" element={<Pipelining />} />
+
+          {/* --- teammates' lessons: replace these two --------------------------------- */}
           <Route
             path="/topics/cache-memory-hierarchy"
             element={<Placeholder what="Cache and memory hierarchy lesson" />}
@@ -68,6 +72,10 @@ export function App() {
             path="/topics/buses-interrupts"
             element={<Placeholder what="Buses and interrupts lesson" />}
           />
+
+          {/* Public: the tally is shown to everyone, and the page itself asks visitors
+              who are signed out to sign in before voting. */}
+          <Route path="/requests" element={<RequestTopic />} />
 
           {/* --- teammates' pages ------------------------------------------------------ */}
           <Route

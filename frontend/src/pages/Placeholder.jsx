@@ -8,7 +8,6 @@
 //
 // Still to be built, and by whom:
 //
-//   /topics/pipelining               lesson      (teammate)
 //   /topics/cache-memory-hierarchy   lesson      (teammate)
 //   /topics/buses-interrupts         lesson      (teammate)
 //   /quiz/:topicId                   quiz page   (teammate) - API is ready:

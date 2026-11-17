@@ -23,9 +23,11 @@ infra/      AWS CDK: Cognito, DynamoDB, Lambda, the static site  (see infra/READ
 | Frontend scaffold, Cognito auth, API client | Alina | done |
 | Lesson: the instruction cycle | Alina | done |
 | Lesson: number representation | Alina | done |
-| Lessons: pipelining, cache/memory, buses/interrupts | teammate | placeholder routes in `App.jsx` |
+| Lesson: pipelining with hazards | Sofia | done |
+| Request page: topic votes and donation intent | Sofia | done |
+| CDK stack and deploy | Sofia | done — see [`infra/README.md`](infra/README.md) |
+| Lessons: cache/memory, buses/interrupts | teammate | placeholder routes in `App.jsx` |
 | Quiz page, progress page, cheat-sheet page | teammate | placeholder routes in `App.jsx` |
-| CDK stack and deploy | teammate | `infra/` |
 
 Every placeholder is a single `<Route>` in [`frontend/src/App.jsx`](frontend/src/App.jsx)
 rendering `<Placeholder>`. Replace the element with your component; nothing else has to
@@ -53,7 +55,9 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:5173. The two finished lessons are linked from the home page.
+Open http://localhost:5173. The finished lessons are linked from the home page.
+
+`npm test` in `frontend/` checks the pipelining model against the textbook cases.
 
 ### Progress, requests and feedback need DynamoDB
 
@@ -121,8 +125,22 @@ The CDK stack creates these; the API only ever reads their names from the enviro
 One row per user per topic in the first two, so voting or finishing a lesson twice updates a
 row instead of adding one. No secondary indexes are needed.
 
-## Deploying the backend
+## Deploying
+
+Everything — Cognito, the tables, the API on Lambda, the site on CloudFront — is one CDK
+stack. With Node 22+ and a signed-in AWS CLI:
+
+```bash
+cd infra
+npm install
+npx cdk bootstrap     # once per AWS account and region
+npm run deploy        # builds backend + frontend, then deploys; prints the site URL
+```
+
+The deploy writes the real `config.json` into the site, so there is nothing to edit
+afterwards. Prerequisites, outputs, costs, teardown and troubleshooting are in
+[`infra/README.md`](infra/README.md).
 
 `backend/lambda.js` wraps the same Express app with `serverless-http`; `src/index.js`
 exports the app and never calls `listen()`, which is what makes both targets possible.
-Point the Lambda handler at `lambda.handler`.
+The Lambda handler is `lambda.handler`.
