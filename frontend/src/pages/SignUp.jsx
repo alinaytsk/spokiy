@@ -2,18 +2,27 @@
 //
 // One page, two steps: the form swaps to the code field once signUp() succeeds, because
 // sending the visitor to a separate /confirm page would lose the username if they reloaded.
+//
+// The sign-in page also lands here, straight on the code step, when someone tries to sign
+// in to an account they never confirmed (state.confirmEmail). Without that, an account
+// whose code was lost could neither sign in nor sign up again ("User already exists").
 
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import { useAuth } from '../auth/context.js';
 
 export function SignUp() {
-  const { signUp, confirmSignUp, configured } = useAuth();
+  const { signUp, confirmSignUp, resendCode, configured } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const fromSignIn = location.state?.confirmEmail ?? null;
 
-  const [step, setStep] = useState('details');
-  const [email, setEmail] = useState('');
+  const [step, setStep] = useState(fromSignIn ? 'confirm' : 'details');
+  const [email, setEmail] = useState(fromSignIn ?? '');
+  const [notice, setNotice] = useState(
+    fromSignIn ? 'This account is not confirmed yet. We have just sent you a new code.' : null,
+  );
   const [password, setPassword] = useState('');
   const [code, setCode] = useState('');
   const [error, setError] = useState(null);
@@ -33,13 +42,27 @@ export function SignUp() {
     }
   }
 
+  async function handleResend() {
+    setError(null);
+    setNotice(null);
+    setBusy(true);
+    try {
+      await resendCode(email);
+      setNotice('A new code is on its way. Check spam if it does not arrive in a minute.');
+    } catch (problem) {
+      setError(problem.message);
+    } finally {
+      setBusy(false);
+    }
+  }
+
   async function handleConfirm(event) {
     event.preventDefault();
     setError(null);
     setBusy(true);
     try {
       await confirmSignUp(code, email);
-      navigate('/sign-in', { replace: true });
+      navigate('/sign-in', { replace: true, state: { confirmed: true } });
     } catch (problem) {
       setError(problem.message);
     } finally {
@@ -87,7 +110,7 @@ export function SignUp() {
         </form>
       ) : (
         <form onSubmit={handleConfirm}>
-          <p>We sent a confirmation code to {email}.</p>
+          {notice ? <p className="notice">{notice}</p> : <p>We sent a confirmation code to {email}.</p>}
 
           <label htmlFor="code">Confirmation code</label>
           <input
@@ -101,6 +124,9 @@ export function SignUp() {
 
           <button type="submit" disabled={busy}>
             {busy ? 'Confirming…' : 'Confirm'}
+          </button>
+          <button type="button" onClick={handleResend} disabled={busy}>
+            Send the code again
           </button>
         </form>
       )}
