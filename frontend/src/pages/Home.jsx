@@ -1,14 +1,19 @@
-// The home page: the hero, then the topic list read from the API, so adding a topic is a
-// backend change only.
+// The home page: the scroll-driven 3D hero, then the topic list read from the API, so
+// adding a topic is a backend change only.
+//
+// Home is the one light page. It switches the body to the light palette while mounted and
+// back when you leave, so lessons, quiz and the rest keep the dark theme.
 //
 // The list is laid out like a spec table - index, title, one-line idea, state - because
 // it is one: five topics, which are ready, which are coming.
 
-import { useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import ExplodedStack from '../components/ExplodedStack.jsx';
 import { api } from '../lib/api.js';
+
+// three.js is ~150 KB gzipped: load it only here, and only once Home renders.
+const Hero3D = lazy(() => import('../components/hero3d/Hero3D.jsx'));
 
 // The lessons that actually exist. Everything else routes to a placeholder until the
 // teammate who owns it pushes their page.
@@ -32,35 +37,18 @@ export function Home() {
       .finally(() => setLoading(false));
   }, []);
 
+  useEffect(() => {
+    document.body.classList.add('light');
+    return () => document.body.classList.remove('light');
+  }, []);
+
   const ready = topics.filter((topic) => BUILT.has(topic.id)).length;
 
   return (
     <section>
-      <header className="hero">
-        <div className="heroText">
-          <p className="eyebrow">Computer Organization Principles · UCU</p>
-          <h1>
-            The computer, <em>taken apart.</em>
-          </h1>
-          <p className="lede">
-            Short, clickable explanations of the parts of the course that are hard to hold in
-            your head. Change the parameters, watch what moves, then practise on questions
-            written the way the course asks them.
-          </p>
-          <div className="heroActions">
-            <Link className="button primary" to="/topics/instruction-cycle">
-              Begin with the cycle
-            </Link>
-            <Link className="button" to="/quiz/practice">
-              Random practice
-            </Link>
-          </div>
-        </div>
-
-        <div className="heroArt">
-          <ExplodedStack />
-        </div>
-      </header>
+      <Suspense fallback={<div className="hero3d hero3dLoading" />}>
+        <Hero3D />
+      </Suspense>
 
       <div className="sectionHead">
         <h2>Topics</h2>
