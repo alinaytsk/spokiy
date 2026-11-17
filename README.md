@@ -46,6 +46,10 @@ AUTH_BYPASS=true npm run dev
 `AUTH_BYPASS=true` makes every request look like a signed-in user, so the site works before
 the Cognito pool exists. It is refused when `NODE_ENV=production`.
 
+`npm run dev` and `npm start` read `backend/.env` through Node's own `--env-file-if-exists`
+(Node 22.9 or later), so there is no dotenv package. Plain `node src/server.js` does **not**
+read it.
+
 Then the site:
 
 ```bash
@@ -64,7 +68,17 @@ Two ways forward:
 
 - Use the deployed tables: put the real names from the CDK output into `backend/.env`.
 - Run [DynamoDB Local](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.html),
-  create the three tables with the key schemas below, and set `DYNAMO_ENDPOINT=http://localhost:8000`.
+  create the three tables with the key schemas below, and set `DYNAMO_ENDPOINT=http://localhost:8000`
+  and the three `TABLE_*` names in `.env`:
+
+  ```bash
+  docker run -d --rm --name spokiy-ddb -p 8000:8000 amazon/dynamodb-local
+  ```
+
+  DynamoDB Local keeps a separate set of tables per access key and region, so create the
+  tables and run the API with the **same** dummy credentials, e.g.
+  `AWS_ACCESS_KEY_ID=local AWS_SECRET_ACCESS_KEY=local AWS_REGION=eu-central-1`. With a
+  different key the API answers 500 and logs `ResourceNotFoundException`.
 
 The lessons, the cheat sheets and the quizzes need none of this — they are files on disk.
 
