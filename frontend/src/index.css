@@ -1,36 +1,47 @@
-:root {
-  --bg: #f7f7f9;
-  --surface: #ffffff;
-  --border: #e0e0e6;
-  --text: #1c1c22;
-  --muted: #6a6a78;
-  --accent: #3b5bdb;
-  --accent-soft: #e7ecfd;
-  --on: #e8590c;
-  --on-soft: #fff0e6;
-  --good: #2b8a3e;
-  --bad: #c92a2a;
+/* =====================================================================================
+   sPOKiy design system - "taken apart"
 
-  color-scheme: light dark;
-  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+   Dark and monochrome: near-black ground, greys that step lighter like stacked panels,
+   white for emphasis, and one signal colour (--on) reserved for what the lessons need you
+   to look at: the active register, the stalled instruction, the cache miss.
+
+   Three typefaces, three jobs:
+     --font-display  Michroma, wide and uppercase - titles and big numbers only
+     --font-body     Manrope - everything you read
+     --font-mono     JetBrains Mono - labels, registers, code, the small print
+
+   Every page styles itself from the tokens below. Change a token, not a page.
+   ===================================================================================== */
+
+:root {
+  --bg: #08080a;
+  --bg-raise: #0d0d10;
+  --surface: #111114;
+  --surface-2: #19191d;
+  --surface-3: #26262b;
+  --surface-4: #3a3a41;
+  --border: rgba(255, 255, 255, 0.1);
+  --line: rgba(255, 255, 255, 0.24);
+  --text: #ececee;
+  --muted: #8d8d96;
+  --accent: #f4f4f5;
+  --accent-soft: rgba(255, 255, 255, 0.07);
+  --on: #ff6a3d;
+  --on-soft: rgba(255, 106, 61, 0.15);
+  --good: #7fe0a6;
+  --bad: #ff6b6b;
+
+  --font-display: 'Michroma', 'Eurostile', 'Arial Black', sans-serif;
+  --font-body: 'Manrope', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+
+  --radius: 4px;
+  --radius-lg: 6px;
+
+  color-scheme: dark;
+  font-family: var(--font-body);
   background: var(--bg);
   color: var(--text);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #141418;
-    --surface: #1d1d23;
-    --border: #32323c;
-    --text: #ececf1;
-    --muted: #9a9aa8;
-    --accent: #748ffc;
-    --accent-soft: #232a45;
-    --on: #ff922b;
-    --on-soft: #3a2a18;
-    --good: #51cf66;
-    --bad: #ff6b6b;
-  }
 }
 
 * {
@@ -39,74 +50,192 @@
 
 body {
   margin: 0;
-  background: var(--bg);
+  background:
+    radial-gradient(1200px 600px at 85% -10%, rgba(255, 255, 255, 0.05), transparent 60%),
+    var(--bg);
+  background-attachment: fixed;
   color: var(--text);
-  line-height: 1.55;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--on);
+  color: var(--bg);
+}
+
+a {
+  color: var(--accent);
+  text-underline-offset: 3px;
+  text-decoration-color: var(--line);
+}
+
+a:hover {
+  text-decoration-color: var(--accent);
+}
+
+h1,
+h2,
+h3 {
+  line-height: 1.15;
 }
 
 code {
-  font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
-  font-size: 0.92em;
+  font-family: var(--font-mono);
+  font-size: 0.88em;
   background: var(--accent-soft);
-  padding: 0.1em 0.35em;
-  border-radius: 4px;
+  border: 1px solid var(--border);
+  padding: 0.05em 0.35em;
+  border-radius: 3px;
+}
+
+:focus-visible {
+  outline: 2px solid var(--on);
+  outline-offset: 2px;
 }
 
 .shell {
-  max-width: 860px;
+  max-width: 1080px;
   margin: 0 auto;
-  padding: 0 16px 48px;
+  padding: 0 24px 48px;
+}
+
+@media (max-width: 600px) {
+  .shell {
+    padding: 0 16px 40px;
+  }
+}
+
+/* --- the pixel mark: a 4x2 checker, the little motif from the panels --------------- */
+.px {
+  display: inline-block;
+  width: 16px;
+  height: 8px;
+  background: conic-gradient(var(--text) 25%, transparent 0 50%, var(--text) 0 75%, transparent 0)
+    0 0 / 8px 8px;
+  opacity: 0.8;
+  flex: none;
 }
 
 /* --- navigation ------------------------------------------------------------------- */
 .nav {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 10px 22px;
   flex-wrap: wrap;
-  padding: 16px 0;
-  border-bottom: 1px solid var(--border);
-  margin-bottom: 28px;
+  padding: 22px 0;
+  margin-bottom: 36px;
 }
 
 .nav a {
   color: var(--text);
   text-decoration: none;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.75;
 }
 
-.nav a:hover {
+.nav a:hover,
+.nav a.active {
+  opacity: 1;
   color: var(--accent);
 }
 
-.brand {
-  font-weight: 700;
-  font-size: 1.15rem;
-  letter-spacing: -0.02em;
+.nav .brand {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  opacity: 1;
 }
 
+/* The long hairline between the brand and the links. */
 .spacer {
-  flex: 1;
+  flex: 1 1 40px;
+  height: 1px;
+  background: var(--line);
+  min-width: 24px;
+}
+
+.nav button {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 6px 12px;
+}
+
+.nav .muted {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+}
+
+@media (max-width: 600px) {
+  .nav {
+    gap: 10px 16px;
+    margin-bottom: 24px;
+  }
+
+  .spacer {
+    flex-basis: 100%;
+    order: 1;
+    min-width: 0;
+  }
+
+  .nav .brand {
+    order: 0;
+  }
+
+  .nav > :not(.brand):not(.spacer) {
+    order: 2;
+  }
 }
 
 /* --- generic ---------------------------------------------------------------------- */
+.hero h1,
+.lesson header h1,
+.requestPage header h1 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  overflow-wrap: break-word;
+  hyphens: manual;
+}
+
 .hero h1 {
-  font-size: 2.4rem;
-  margin: 0 0 8px;
-  letter-spacing: -0.03em;
+  font-size: clamp(1.7rem, 3.7vw, 3rem);
+  margin: 0 0 16px;
 }
 
 .lede {
   font-size: 1.05rem;
   color: var(--muted);
-  max-width: 60ch;
+  max-width: 62ch;
 }
 
 .eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  font-size: 0.7rem;
   color: var(--muted);
-  margin: 0 0 4px;
+  margin: 0 0 14px;
+}
+
+.eyebrow::before {
+  content: '';
+  width: 16px;
+  height: 8px;
+  background: conic-gradient(var(--text) 25%, transparent 0 50%, var(--text) 0 75%, transparent 0)
+    0 0 / 8px 8px;
+  opacity: 0.8;
+  flex: none;
 }
 
 .muted {
@@ -120,41 +249,298 @@ code {
 
 .notice {
   background: var(--accent-soft);
-  border-left: 3px solid var(--accent);
+  border-left: 2px solid var(--accent);
   padding: 10px 14px;
-  border-radius: 0 6px 6px 0;
+  border-radius: 0 var(--radius) var(--radius) 0;
   font-size: 0.93rem;
 }
 
 .card {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 24px;
+  border-radius: var(--radius-lg);
+  padding: 28px;
 }
 
-/* --- topic list ------------------------------------------------------------------- */
+.card h1 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  text-transform: uppercase;
+  font-size: clamp(1.3rem, 3.5vw, 1.8rem);
+  letter-spacing: 0.02em;
+  margin: 0 0 12px;
+}
+
+@media (max-width: 600px) {
+  .card {
+    padding: 20px;
+  }
+}
+
+/* --- home: hero --------------------------------------------------------------------- */
+.hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 24px;
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background:
+    radial-gradient(600px 380px at 70% 40%, rgba(255, 255, 255, 0.07), transparent 70%),
+    linear-gradient(180deg, var(--bg-raise), var(--bg));
+  padding: 28px 32px 32px;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* The two hairline circles behind everything. */
+.hero::before,
+.hero::after {
+  content: '';
+  position: absolute;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.hero::before {
+  width: 560px;
+  height: 560px;
+  right: -60px;
+  top: -120px;
+}
+
+.hero::after {
+  width: 380px;
+  height: 380px;
+  left: -140px;
+  bottom: -220px;
+}
+
+.heroBar {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 24px;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.heroText {
+  position: relative;
+  z-index: 1;
+}
+
+.heroMarks {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin: 8px 0 22px;
+}
+
+.heroMarks::after {
+  content: '';
+  order: 1;
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+
+.heroMarks .px:last-child {
+  order: 2;
+}
+
+.heroTagline {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  color: var(--text);
+  margin: 0 0 8px;
+}
+
+.heroActions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 24px;
+}
+
+.heroArt {
+  position: relative;
+  min-width: 0;
+}
+
+.heroArt svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.wires {
+  position: absolute;
+  inset: auto -10% -30% -10%;
+  z-index: -1;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.wires path {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.16);
+  stroke-width: 0.8;
+}
+
+@media (max-width: 820px) {
+  .hero {
+    grid-template-columns: 1fr;
+    padding: 20px;
+  }
+
+  .heroBar span:nth-child(n + 3) {
+    display: none;
+  }
+}
+
+/* The exploded chip. Layers slide apart with --spread (0 stacked, 1 apart). */
+.stackLayer {
+  transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.stackLayer .top {
+  stroke: rgba(255, 255, 255, 0.35);
+  stroke-width: 0.8;
+}
+
+.stackLayer .side {
+  stroke: rgba(255, 255, 255, 0.12);
+  stroke-width: 0.6;
+}
+
+.stackLayer .grid {
+  stroke: rgba(255, 255, 255, 0.14);
+  stroke-width: 0.6;
+  fill: none;
+}
+
+.stackLayer .die {
+  stroke: rgba(255, 255, 255, 0.5);
+  stroke-width: 0.8;
+}
+
+.stackLabel line {
+  stroke: var(--line);
+  stroke-width: 0.8;
+}
+
+.stackLabel circle {
+  fill: var(--text);
+}
+
+.stackLabel .stackIndex {
+  fill: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+}
+
+.stackLabel .stackName {
+  fill: var(--text);
+  font-family: var(--font-display);
+  font-size: 14px;
+  letter-spacing: 0.06em;
+}
+
+.stackLabel .stackMeta {
+  fill: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+}
+
+.stackLayer.hot .top {
+  stroke: var(--on);
+  stroke-width: 1.4;
+}
+
+.stackLabel.hot .stackName {
+  fill: var(--on);
+}
+
+/* --- topic list: rows with hairlines, like a spec table ------------------------------ */
+.sectionHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 56px 0 8px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+.sectionHead h2 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  text-transform: uppercase;
+  font-size: clamp(1.1rem, 2.6vw, 1.5rem);
+  letter-spacing: 0.04em;
+  margin: 0;
+}
+
+.sectionHead span {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--muted);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
 .topicList {
   list-style: none;
   padding: 0;
-  display: grid;
-  gap: 14px;
+  margin: 0;
 }
 
 .topicList li {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 16px 20px;
+  position: relative;
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr) auto;
+  gap: 4px 20px;
+  align-items: baseline;
+  padding: 22px 8px;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.2s;
+}
+
+.topicList li:hover {
+  background: linear-gradient(90deg, var(--accent-soft), transparent 80%);
 }
 
 .topicList li.pending {
-  opacity: 0.72;
+  opacity: 0.55;
+}
+
+.topicIndex {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--muted);
+  letter-spacing: 0.1em;
 }
 
 .topicList h2 {
-  margin: 0 0 4px;
-  font-size: 1.15rem;
+  margin: 0 0 6px;
+  font-family: var(--font-display);
+  font-weight: 400;
+  text-transform: uppercase;
+  font-size: clamp(0.95rem, 2.2vw, 1.15rem);
+  letter-spacing: 0.04em;
 }
 
 .topicList h2 a {
@@ -162,72 +548,125 @@ code {
   text-decoration: none;
 }
 
-.topicList h2 a:hover {
-  color: var(--accent);
+/* The whole row is the link. */
+.topicList h2 a::after {
+  content: '';
+  position: absolute;
+  inset: 0;
 }
 
 .topicList p {
-  margin: 0 0 4px;
+  margin: 0;
+  color: var(--muted);
+}
+
+.topicState {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.topicList li.built .topicState {
+  color: var(--text);
+}
+
+@media (max-width: 600px) {
+  .topicList li {
+    grid-template-columns: 40px minmax(0, 1fr);
+  }
+
+  .topicState {
+    grid-column: 2;
+  }
 }
 
 /* --- lesson ----------------------------------------------------------------------- */
-.lesson header h1 {
-  margin: 0 0 8px;
-  font-size: 2rem;
-  letter-spacing: -0.02em;
+.lesson header {
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 8px;
+}
+
+.lesson header h1,
+.requestPage header h1 {
+  margin: 0 0 14px;
+  font-size: clamp(1.5rem, 4.4vw, 2.6rem);
+}
+
+.lesson h2 {
+  font-weight: 600;
 }
 
 .phases {
   list-style: none;
   display: flex;
-  gap: 8px;
+  gap: 0;
   padding: 0;
-  margin: 20px 0;
+  margin: 24px 0;
   flex-wrap: wrap;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  width: fit-content;
+  max-width: 100%;
 }
 
 .phases li {
-  padding: 5px 12px;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  font-size: 0.85rem;
+  padding: 7px 14px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   color: var(--muted);
-  background: var(--surface);
+  border-right: 1px solid var(--border);
+}
+
+.phases li:last-child {
+  border-right: none;
 }
 
 .phases li.on {
   background: var(--on-soft);
-  border-color: var(--on);
   color: var(--on);
-  font-weight: 600;
 }
 
 /* --- the SVG diagram -------------------------------------------------------------- */
 .diagram {
   width: 100%;
   height: auto;
-  background: var(--surface);
+  background:
+    linear-gradient(var(--border) 1px, transparent 1px) 0 0 / 24px 24px,
+    linear-gradient(90deg, var(--border) 1px, transparent 1px) 0 0 / 24px 24px,
+    var(--surface);
+  background-blend-mode: normal;
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: var(--radius-lg);
 }
 
 .diagram .box {
   fill: none;
-  stroke: var(--border);
-  stroke-width: 1.5;
+  stroke: var(--line);
+  stroke-width: 1;
 }
 
 .diagram .label {
   fill: var(--muted);
-  font-size: 13px;
-  font-weight: 600;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
 .diagram .reg rect,
 .diagram .cell rect {
   fill: var(--bg);
-  stroke: var(--border);
-  stroke-width: 1.5;
+  stroke: var(--line);
+  stroke-width: 1;
   transition: fill 0.25s, stroke 0.25s;
 }
 
@@ -235,31 +674,36 @@ code {
 .diagram .cell.on rect {
   fill: var(--on-soft);
   stroke: var(--on);
-  stroke-width: 2.5;
+  stroke-width: 2;
 }
 
 .diagram .regName {
   fill: var(--muted);
-  font-size: 11px;
-  font-weight: 600;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
 }
 
 .diagram .regValue,
 .diagram .cellText {
   fill: var(--text);
   font-size: 13px;
-  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-family: var(--font-mono);
+}
+
+.diagram .cellText {
+  font-size: 11px;
 }
 
 .diagram .bus line {
-  stroke: var(--border);
-  stroke-width: 2;
+  stroke: var(--line);
+  stroke-width: 1.5;
   transition: stroke 0.25s, stroke-width 0.25s;
 }
 
 .diagram .bus.on line {
   stroke: var(--on);
-  stroke-width: 3.5;
+  stroke-width: 3;
 }
 
 .diagram .interrupt line {
@@ -268,6 +712,7 @@ code {
 
 .diagram .busLabel {
   fill: var(--muted);
+  font-family: var(--font-mono);
   font-size: 10px;
 }
 
@@ -277,24 +722,27 @@ code {
 
 /* --- step description ------------------------------------------------------------- */
 .stepBox {
+  position: relative;
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 16px 20px;
+  border-left: 2px solid var(--on);
+  border-radius: var(--radius);
+  padding: 18px 22px;
   margin-top: 16px;
   min-height: 140px;
 }
 
 .stepCount {
   margin: 0;
-  font-size: 0.78rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.14em;
   color: var(--muted);
 }
 
 .stepBox h2 {
-  margin: 4px 0 8px;
+  margin: 6px 0 8px;
   font-size: 1.2rem;
 }
 
@@ -314,34 +762,73 @@ code {
 button,
 select {
   font: inherit;
-  padding: 7px 14px;
-  border-radius: 7px;
-  border: 1px solid var(--border);
-  background: var(--surface);
+  font-size: 0.92rem;
+  padding: 8px 16px;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: transparent;
   color: var(--text);
   cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+select {
+  background: var(--surface);
 }
 
 button:hover:not(:disabled) {
   border-color: var(--accent);
-  color: var(--accent);
+  background: var(--accent-soft);
 }
 
 button:disabled {
-  opacity: 0.45;
+  opacity: 0.35;
   cursor: not-allowed;
 }
 
 button.primary {
   background: var(--accent);
   border-color: var(--accent);
-  color: #fff;
+  color: var(--bg);
+  font-weight: 700;
+}
+
+button.primary:hover:not(:disabled) {
+  background: #fff;
+  color: var(--bg);
+}
+
+/* A link that should look like a button. */
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 18px;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  color: var(--text);
+  text-decoration: none;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.button:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.button.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--bg);
   font-weight: 600;
 }
 
-button.primary:hover {
-  color: #fff;
-  filter: brightness(1.08);
+.button.primary:hover {
+  background: #fff;
 }
 
 /* --- bit toggler ------------------------------------------------------------------ */
@@ -358,26 +845,31 @@ button.primary:hover {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
-  padding: 12px 4px 8px;
-  font-family: ui-monospace, Menlo, Consolas, monospace;
+  gap: 4px;
+  padding: 14px 4px 10px;
+  font-family: var(--font-mono);
+  background: var(--surface);
 }
 
 .bitValue {
-  font-size: 1.7rem;
-  font-weight: 700;
+  font-family: var(--font-display);
+  font-size: 1.6rem;
   line-height: 1;
 }
 
 .bitWeight {
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   color: var(--muted);
 }
 
 .bit.one {
-  background: var(--accent-soft);
+  background: var(--accent);
   border-color: var(--accent);
-  color: var(--accent);
+  color: var(--bg);
+}
+
+.bit.one .bitWeight {
+  color: var(--surface-4);
 }
 
 .bit.signBit {
@@ -385,53 +877,86 @@ button.primary:hover {
 }
 
 .bit.signBit.one {
-  background: var(--on-soft);
+  background: var(--on);
   border-color: var(--on);
-  color: var(--on);
+  color: var(--bg);
 }
 
-/* --- readout ---------------------------------------------------------------------- */
+/* --- readout: panels that step lighter, like the stat slides ------------------------ */
 .readout {
   display: flex;
-  gap: 12px;
+  gap: 0;
   flex-wrap: wrap;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
 }
 
 .readout > div {
-  flex: 1 1 150px;
+  flex: 1 1 170px;
   background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 12px 16px;
+  padding: 16px 18px 18px;
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 18px;
+  min-height: 116px;
+}
+
+.readout > div:nth-child(2) {
+  background: var(--surface-2);
+}
+
+.readout > div:nth-child(3) {
+  background: var(--surface-3);
+}
+
+.readout > div:nth-child(4) {
+  background: var(--surface-4);
+}
+
+.readout > div:last-child {
+  border-right: none;
 }
 
 .readoutLabel {
   display: block;
-  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
   color: var(--muted);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.1em;
+}
+
+.readout > div:nth-child(4) .readoutLabel {
+  color: #c4c4cc;
 }
 
 .readoutValue {
   display: block;
-  font-size: 1.8rem;
-  font-weight: 700;
-  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  line-height: 1.1;
+  overflow-wrap: anywhere;
 }
 
-/* --- the negate trick ------------------------------------------------------------- */
+/* --- the negate trick / try-this panels -------------------------------------------- */
 .trick {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 16px 20px;
+  border-radius: var(--radius-lg);
+  padding: 20px 24px;
   margin-top: 16px;
 }
 
 .trick h2 {
   margin-top: 0;
-  font-size: 1.1rem;
+  font-family: var(--font-display);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 0.95rem;
 }
 
 .trick table {
@@ -452,7 +977,7 @@ button.primary:hover {
 }
 
 .mono {
-  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-family: var(--font-mono);
   letter-spacing: 0.08em;
 }
 
@@ -460,32 +985,102 @@ button.primary:hover {
 form {
   display: grid;
   gap: 6px;
-  max-width: 340px;
+  max-width: 360px;
   margin: 16px 0;
 }
 
 label {
-  font-size: 0.85rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   color: var(--muted);
 }
 
 input {
   font: inherit;
-  padding: 8px 10px;
-  border-radius: 7px;
-  border: 1px solid var(--border);
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
   background: var(--bg);
   color: var(--text);
 }
 
 input:focus {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--on);
   outline-offset: 1px;
 }
 
 form button {
-  margin-top: 8px;
+  margin-top: 10px;
   justify-self: start;
+}
+
+/* --- footers ---------------------------------------------------------------------- */
+.lessonLinks {
+  display: flex;
+  gap: 12px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  margin-top: 32px;
+  flex-wrap: wrap;
+}
+
+.lessonLinks a {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  color: var(--text);
+  text-decoration: none;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.lessonLinks a:first-child {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--bg);
+  font-weight: 600;
+}
+
+.lessonLinks a:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.lessonLinks a:first-child:hover {
+  background: #fff;
+}
+
+.siteFooter {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 72px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+
+.siteFooter p {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+  }
 }
 
 /* --- shared status colours ------------------------------------------------------- */
@@ -501,9 +1096,13 @@ form button {
 .quiz header h1,
 .progressPage header h1,
 .cheatPage header h1 {
-  margin: 0 0 8px;
-  font-size: 2rem;
-  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  font-family: var(--font-display);
+  font-weight: 400;
+  text-transform: uppercase;
+  font-size: clamp(1.5rem, 4.4vw, 2.6rem);
+  letter-spacing: 0.02em;
+  overflow-wrap: break-word;
 }
 
 .quizMeter {
@@ -1151,28 +1750,6 @@ form button {
   color: var(--accent);
 }
 
-/* --- footers ---------------------------------------------------------------------- */
-.lessonLinks {
-  display: flex;
-  gap: 20px;
-  padding-top: 16px;
-  border-top: 1px solid var(--border);
-  margin-top: 24px;
-  flex-wrap: wrap;
-}
-
-.lessonLinks a {
-  color: var(--accent);
-  text-decoration: none;
-  font-weight: 500;
-}
-
-.siteFooter {
-  margin-top: 48px;
-  padding-top: 16px;
-  border-top: 1px solid var(--border);
-}
-
 /* --- pipelining lesson ------------------------------------------------------------ */
 .pipeConfig {
   display: flex;
@@ -1189,7 +1766,10 @@ form button {
 }
 
 .configLabel {
-  font-size: 0.85rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   color: var(--muted);
 }
 
@@ -1277,8 +1857,12 @@ button.toggle.on {
 }
 
 .sectionTitle {
-  font-size: 1.2rem;
-  margin: 32px 0 4px;
+  font-family: var(--font-display);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 1.05rem;
+  margin: 40px 0 6px;
 }
 
 .timingWrap {
@@ -1377,8 +1961,12 @@ button.toggle.on {
 }
 
 .requestGrid h2 {
-  margin: 0 0 8px;
-  font-size: 1.15rem;
+  margin: 0 0 16px;
+  font-family: var(--font-display);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 0.95rem;
 }
 
 .requestForm {
@@ -1395,17 +1983,23 @@ button.toggle.on {
 }
 
 .requestForm legend {
-  font-size: 0.85rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   color: var(--muted);
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 
 label.choice {
   display: flex;
-  gap: 8px;
+  gap: 10px;
   align-items: flex-start;
   color: var(--text);
+  font-family: var(--font-body);
   font-size: 0.95rem;
+  letter-spacing: normal;
+  text-transform: none;
   cursor: pointer;
 }
 

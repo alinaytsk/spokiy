@@ -103,6 +103,7 @@ export function App() {
       </main>
 
       <footer className="siteFooter">
+        <span className="px" aria-hidden="true" />
         <p className="muted">
           A student project for Computer Organization Principles, UCU.
         </p>
