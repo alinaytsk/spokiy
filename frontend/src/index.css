@@ -1,45 +1,47 @@
 /* =====================================================================================
-   sPOKiy design system - "taken apart"
+   sPOKiy design system - refined
 
-   Dark and monochrome: near-black ground, greys that step lighter like stacked panels,
-   white for emphasis, and one signal colour (--on) reserved for what the lessons need you
-   to look at: the active register, the stalled instruction, the cache miss.
+   Restraint over decoration. A warm near-black ground, warm off-white type, greys with a
+   little warmth in them, and one muted brass (--on) that appears only where a lesson
+   needs your eye: the active register, the stalled instruction, the cache miss.
 
-   Three typefaces, three jobs:
-     --font-display  Michroma, wide and uppercase - titles and big numbers only
-     --font-body     Manrope - everything you read
-     --font-mono     JetBrains Mono - labels, registers, code, the small print
+   Type does the work that ornament used to:
+     --font-display  Instrument Serif - large headings and big numbers, sentence case
+     --font-body     Inter - everything you read, and the small labels
+     --font-mono     JetBrains Mono - only for code, registers and addresses
 
    Every page styles itself from the tokens below. Change a token, not a page.
    ===================================================================================== */
 
 :root {
-  --bg: #08080a;
-  --bg-raise: #0d0d10;
-  --surface: #111114;
-  --surface-2: #19191d;
-  --surface-3: #26262b;
-  --surface-4: #3a3a41;
-  --border: rgba(255, 255, 255, 0.1);
-  --line: rgba(255, 255, 255, 0.24);
-  --text: #ececee;
-  --muted: #8d8d96;
-  --accent: #f4f4f5;
-  --accent-soft: rgba(255, 255, 255, 0.07);
-  --on: #ff6a3d;
-  --on-soft: rgba(255, 106, 61, 0.15);
-  --good: #7fe0a6;
-  --bad: #ff6b6b;
+  --bg: #0c0c0b;
+  --bg-raise: #10100f;
+  --surface: #131312;
+  --surface-2: #171716;
+  --surface-3: #1c1c1a;
+  --surface-4: #22221f;
+  --border: rgba(240, 236, 228, 0.08);
+  --line: rgba(240, 236, 228, 0.16);
+  --text: #f0ece4;
+  --muted: #8e8a82;
+  --accent: #f0ece4;
+  --accent-soft: rgba(240, 236, 228, 0.05);
+  --on: #c9a86a;
+  --on-soft: rgba(201, 168, 106, 0.12);
+  --good: #9cc5a1;
+  --bad: #d98c80;
 
-  --font-display: 'Michroma', 'Eurostile', 'Arial Black', sans-serif;
-  --font-body: 'Manrope', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Instrument Serif', 'Times New Roman', serif;
+  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-label: var(--font-body);
   --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
 
-  --radius: 4px;
-  --radius-lg: 6px;
+  --radius: 6px;
+  --radius-lg: 10px;
 
   color-scheme: dark;
   font-family: var(--font-body);
+  font-feature-settings: 'cv11', 'ss01';
   background: var(--bg);
   color: var(--text);
 }
@@ -50,12 +52,10 @@
 
 body {
   margin: 0;
-  background:
-    radial-gradient(1200px 600px at 85% -10%, rgba(255, 255, 255, 0.05), transparent 60%),
-    var(--bg);
-  background-attachment: fixed;
+  background: var(--bg);
   color: var(--text);
   line-height: 1.6;
+  font-size: 15.5px;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -67,6 +67,7 @@ body {
 a {
   color: var(--accent);
   text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
   text-decoration-color: var(--line);
 }
 
@@ -78,118 +79,91 @@ h1,
 h2,
 h3 {
   line-height: 1.15;
+  font-weight: 500;
 }
 
 code {
   font-family: var(--font-mono);
-  font-size: 0.88em;
+  font-size: 0.85em;
   background: var(--accent-soft);
-  border: 1px solid var(--border);
-  padding: 0.05em 0.35em;
-  border-radius: 3px;
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
 }
 
 :focus-visible {
-  outline: 2px solid var(--on);
-  outline-offset: 2px;
+  outline: 1px solid var(--on);
+  outline-offset: 3px;
 }
 
 .shell {
-  max-width: 1080px;
+  max-width: 1040px;
   margin: 0 auto;
-  padding: 0 24px 48px;
+  padding: 0 32px 56px;
 }
 
 @media (max-width: 600px) {
   .shell {
-    padding: 0 16px 40px;
+    padding: 0 18px 40px;
   }
 }
 
-/* --- the pixel mark: a 4x2 checker, the little motif from the panels --------------- */
+/* The pixel mark from the first design is retired; keep the class harmless. */
 .px {
-  display: inline-block;
-  width: 16px;
-  height: 8px;
-  background: conic-gradient(var(--text) 25%, transparent 0 50%, var(--text) 0 75%, transparent 0)
-    0 0 / 8px 8px;
-  opacity: 0.8;
-  flex: none;
+  display: none;
 }
 
 /* --- navigation ------------------------------------------------------------------- */
 .nav {
   display: flex;
   align-items: center;
-  gap: 10px 22px;
+  gap: 8px 28px;
   flex-wrap: wrap;
-  padding: 22px 0;
-  margin-bottom: 36px;
+  padding: 28px 0;
+  margin-bottom: 48px;
+  border-bottom: 1px solid var(--border);
 }
 
 .nav a {
-  color: var(--text);
+  color: var(--muted);
   text-decoration: none;
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  opacity: 0.75;
+  font-size: 0.88rem;
+  transition: color 0.2s;
 }
 
-.nav a:hover,
-.nav a.active {
-  opacity: 1;
-  color: var(--accent);
+.nav a:hover {
+  color: var(--text);
 }
 
 .nav .brand {
   font-family: var(--font-display);
-  font-size: 1rem;
-  letter-spacing: 0.04em;
-  text-transform: none;
-  opacity: 1;
+  font-size: 1.55rem;
+  line-height: 1;
+  color: var(--text);
+  letter-spacing: -0.01em;
 }
 
-/* The long hairline between the brand and the links. */
 .spacer {
-  flex: 1 1 40px;
-  height: 1px;
-  background: var(--line);
-  min-width: 24px;
+  flex: 1;
 }
 
 .nav button {
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  padding: 6px 12px;
+  font-size: 0.85rem;
+  padding: 5px 12px;
 }
 
 .nav .muted {
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: 0.85rem;
 }
 
 @media (max-width: 600px) {
   .nav {
-    gap: 10px 16px;
-    margin-bottom: 24px;
+    gap: 8px 18px;
+    margin-bottom: 32px;
   }
 
   .spacer {
     flex-basis: 100%;
-    order: 1;
-    min-width: 0;
-  }
-
-  .nav .brand {
-    order: 0;
-  }
-
-  .nav > :not(.brand):not(.spacer) {
-    order: 2;
+    height: 0;
   }
 }
 
@@ -199,43 +173,25 @@ code {
 .requestPage header h1 {
   font-family: var(--font-display);
   font-weight: 400;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
+  letter-spacing: -0.015em;
   overflow-wrap: break-word;
-  hyphens: manual;
-}
-
-.hero h1 {
-  font-size: clamp(1.7rem, 3.7vw, 3rem);
-  margin: 0 0 16px;
 }
 
 .lede {
-  font-size: 1.05rem;
+  font-size: 1.08rem;
+  line-height: 1.65;
   color: var(--muted);
-  max-width: 62ch;
+  max-width: 58ch;
 }
 
 .eyebrow {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-family: var(--font-mono);
+  font-family: var(--font-label);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  letter-spacing: 0.14em;
-  font-size: 0.7rem;
-  color: var(--muted);
-  margin: 0 0 14px;
-}
-
-.eyebrow::before {
-  content: '';
-  width: 16px;
-  height: 8px;
-  background: conic-gradient(var(--text) 25%, transparent 0 50%, var(--text) 0 75%, transparent 0)
-    0 0 / 8px 8px;
-  opacity: 0.8;
-  flex: none;
+  color: var(--on);
+  margin: 0 0 18px;
 }
 
 .muted {
@@ -249,8 +205,8 @@ code {
 
 .notice {
   background: var(--accent-soft);
-  border-left: 2px solid var(--accent);
-  padding: 10px 14px;
+  border-left: 1px solid var(--on);
+  padding: 12px 16px;
   border-radius: 0 var(--radius) var(--radius) 0;
   font-size: 0.93rem;
 }
@@ -259,123 +215,63 @@ code {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: 28px;
+  padding: 32px;
 }
 
 .card h1 {
   font-family: var(--font-display);
   font-weight: 400;
-  text-transform: uppercase;
-  font-size: clamp(1.3rem, 3.5vw, 1.8rem);
-  letter-spacing: 0.02em;
+  font-size: clamp(1.8rem, 4vw, 2.4rem);
+  letter-spacing: -0.01em;
   margin: 0 0 12px;
 }
 
 @media (max-width: 600px) {
   .card {
-    padding: 20px;
+    padding: 22px;
   }
 }
 
 /* --- home: hero --------------------------------------------------------------------- */
 .hero {
-  position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 24px;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  gap: 40px;
   align-items: center;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  background:
-    radial-gradient(600px 380px at 70% 40%, rgba(255, 255, 255, 0.07), transparent 70%),
-    linear-gradient(180deg, var(--bg-raise), var(--bg));
-  padding: 28px 32px 32px;
-  overflow: hidden;
-  isolation: isolate;
+  padding: 8px 0 24px;
 }
 
-/* The two hairline circles behind everything. */
-.hero::before,
-.hero::after {
-  content: '';
-  position: absolute;
-  border: 1px solid var(--border);
-  border-radius: 50%;
-  z-index: -1;
-  pointer-events: none;
+.hero h1 {
+  font-size: clamp(2.8rem, 6.4vw, 5.2rem);
+  line-height: 0.98;
+  margin: 0 0 28px;
 }
 
-.hero::before {
-  width: 560px;
-  height: 560px;
-  right: -60px;
-  top: -120px;
-}
-
-.hero::after {
-  width: 380px;
-  height: 380px;
-  left: -140px;
-  bottom: -220px;
-}
-
-.heroBar {
-  grid-column: 1 / -1;
-  display: flex;
-  gap: 24px;
-  justify-content: space-between;
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+.hero h1 em {
+  font-style: italic;
   color: var(--muted);
-  padding-bottom: 14px;
-  border-bottom: 1px solid var(--border);
+}
+
+/* Retired ornaments from the first design. */
+.heroBar,
+.heroMarks,
+.heroTagline,
+.wires {
+  display: none;
 }
 
 .heroText {
-  position: relative;
-  z-index: 1;
-}
-
-.heroMarks {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  margin: 8px 0 22px;
-}
-
-.heroMarks::after {
-  content: '';
-  order: 1;
-  flex: 1;
-  height: 1px;
-  background: var(--line);
-}
-
-.heroMarks .px:last-child {
-  order: 2;
-}
-
-.heroTagline {
-  font-family: var(--font-display);
-  text-transform: uppercase;
-  font-size: 0.85rem;
-  letter-spacing: 0.08em;
-  color: var(--text);
-  margin: 0 0 8px;
+  min-width: 0;
 }
 
 .heroActions {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   flex-wrap: wrap;
-  margin-top: 24px;
+  margin-top: 32px;
 }
 
 .heroArt {
-  position: relative;
   min-width: 0;
 }
 
@@ -385,121 +281,101 @@ code {
   height: auto;
 }
 
-.wires {
-  position: absolute;
-  inset: auto -10% -30% -10%;
-  z-index: -1;
-  opacity: 0.5;
-  pointer-events: none;
-}
-
-.wires path {
-  fill: none;
-  stroke: rgba(255, 255, 255, 0.16);
-  stroke-width: 0.8;
-}
-
 @media (max-width: 820px) {
   .hero {
     grid-template-columns: 1fr;
-    padding: 20px;
-  }
-
-  .heroBar span:nth-child(n + 3) {
-    display: none;
+    gap: 16px;
   }
 }
 
-/* The exploded chip. Layers slide apart with --spread (0 stacked, 1 apart). */
+/* The exploded chip, drawn in hairlines. */
 .stackLayer {
-  transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition: transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+  cursor: default;
 }
 
 .stackLayer .top {
-  stroke: rgba(255, 255, 255, 0.35);
-  stroke-width: 0.8;
+  stroke: rgba(240, 236, 228, 0.28);
+  stroke-width: 0.7;
 }
 
 .stackLayer .side {
-  stroke: rgba(255, 255, 255, 0.12);
-  stroke-width: 0.6;
+  stroke: rgba(240, 236, 228, 0.08);
+  stroke-width: 0.5;
 }
 
 .stackLayer .grid {
-  stroke: rgba(255, 255, 255, 0.14);
-  stroke-width: 0.6;
+  stroke: rgba(240, 236, 228, 0.07);
+  stroke-width: 0.5;
   fill: none;
 }
 
 .stackLayer .die {
-  stroke: rgba(255, 255, 255, 0.5);
-  stroke-width: 0.8;
+  stroke: rgba(240, 236, 228, 0.3);
+  stroke-width: 0.6;
 }
 
 .stackLabel line {
-  stroke: var(--line);
-  stroke-width: 0.8;
+  stroke: var(--border);
+  stroke-width: 0.7;
 }
 
 .stackLabel circle {
-  fill: var(--text);
+  fill: var(--muted);
 }
 
 .stackLabel .stackIndex {
-  fill: var(--muted);
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.1em;
+  display: none;
 }
 
 .stackLabel .stackName {
   fill: var(--text);
-  font-family: var(--font-display);
+  font-family: var(--font-body);
+  font-weight: 500;
   font-size: 14px;
-  letter-spacing: 0.06em;
 }
 
 .stackLabel .stackMeta {
   fill: var(--muted);
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: 11.5px;
 }
 
 .stackLayer.hot .top {
   stroke: var(--on);
-  stroke-width: 1.4;
+  stroke-width: 1;
 }
 
 .stackLabel.hot .stackName {
   fill: var(--on);
 }
 
-/* --- topic list: rows with hairlines, like a spec table ------------------------------ */
+.stackLabel.hot circle {
+  fill: var(--on);
+}
+
+/* --- topic list ------------------------------------------------------------------- */
 .sectionHead {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   gap: 16px;
-  margin: 56px 0 8px;
-  padding-bottom: 12px;
+  margin: 72px 0 0;
+  padding-bottom: 16px;
   border-bottom: 1px solid var(--line);
 }
 
 .sectionHead h2 {
   font-family: var(--font-display);
   font-weight: 400;
-  text-transform: uppercase;
-  font-size: clamp(1.1rem, 2.6vw, 1.5rem);
-  letter-spacing: 0.04em;
+  font-size: clamp(1.8rem, 3.4vw, 2.4rem);
+  letter-spacing: -0.01em;
   margin: 0;
 }
 
 .sectionHead span {
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: 0.85rem;
   color: var(--muted);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
 }
 
 .topicList {
@@ -511,44 +387,41 @@ code {
 .topicList li {
   position: relative;
   display: grid;
-  grid-template-columns: 64px minmax(0, 1fr) auto;
-  gap: 4px 20px;
+  grid-template-columns: 56px minmax(0, 1fr) auto;
+  gap: 4px 24px;
   align-items: baseline;
-  padding: 22px 8px;
+  padding: 26px 0;
   border-bottom: 1px solid var(--border);
-  transition: background 0.2s;
-}
-
-.topicList li:hover {
-  background: linear-gradient(90deg, var(--accent-soft), transparent 80%);
 }
 
 .topicList li.pending {
-  opacity: 0.55;
+  opacity: 0.45;
 }
 
 .topicIndex {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.1rem;
   color: var(--muted);
-  letter-spacing: 0.1em;
 }
 
 .topicList h2 {
   margin: 0 0 6px;
-  font-family: var(--font-display);
-  font-weight: 400;
-  text-transform: uppercase;
-  font-size: clamp(0.95rem, 2.2vw, 1.15rem);
-  letter-spacing: 0.04em;
+  font-size: 1.15rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
 }
 
 .topicList h2 a {
   color: var(--text);
   text-decoration: none;
+  transition: color 0.2s;
 }
 
-/* The whole row is the link. */
+.topicList li.built:hover h2 a {
+  color: var(--on);
+}
+
 .topicList h2 a::after {
   content: '';
   position: absolute;
@@ -558,27 +431,24 @@ code {
 .topicList p {
   margin: 0;
   color: var(--muted);
+  max-width: 60ch;
 }
 
 .topicState {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  font-size: 0.85rem;
   color: var(--muted);
   white-space: nowrap;
+  transition: transform 0.2s, color 0.2s;
 }
 
-.topicList li.built .topicState {
+.topicList li.built:hover .topicState {
   color: var(--text);
+  transform: translateX(4px);
 }
 
 @media (max-width: 600px) {
   .topicList li {
-    grid-template-columns: 40px minmax(0, 1fr);
+    grid-template-columns: 32px minmax(0, 1fr);
   }
 
   .topicState {
@@ -588,62 +458,49 @@ code {
 
 /* --- lesson ----------------------------------------------------------------------- */
 .lesson header {
-  padding-bottom: 20px;
-  border-bottom: 1px solid var(--line);
+  padding-bottom: 32px;
   margin-bottom: 8px;
+  border-bottom: 1px solid var(--border);
 }
 
 .lesson header h1,
 .requestPage header h1 {
-  margin: 0 0 14px;
-  font-size: clamp(1.5rem, 4.4vw, 2.6rem);
+  margin: 0 0 18px;
+  font-size: clamp(2.3rem, 5.4vw, 3.8rem);
+  line-height: 1.02;
 }
 
 .lesson h2 {
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .phases {
   list-style: none;
   display: flex;
-  gap: 0;
+  gap: 28px;
   padding: 0;
-  margin: 24px 0;
+  margin: 28px 0;
   flex-wrap: wrap;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  width: fit-content;
-  max-width: 100%;
 }
 
 .phases li {
-  padding: 7px 14px;
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  padding: 0 0 6px;
+  font-size: 0.88rem;
   color: var(--muted);
-  border-right: 1px solid var(--border);
-}
-
-.phases li:last-child {
-  border-right: none;
+  border-bottom: 1px solid transparent;
+  transition: color 0.25s, border-color 0.25s;
 }
 
 .phases li.on {
-  background: var(--on-soft);
-  color: var(--on);
+  color: var(--text);
+  border-bottom-color: var(--on);
 }
 
 /* --- the SVG diagram -------------------------------------------------------------- */
 .diagram {
   width: 100%;
   height: auto;
-  background:
-    linear-gradient(var(--border) 1px, transparent 1px) 0 0 / 24px 24px,
-    linear-gradient(90deg, var(--border) 1px, transparent 1px) 0 0 / 24px 24px,
-    var(--surface);
-  background-blend-mode: normal;
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
 }
@@ -651,37 +508,34 @@ code {
 .diagram .box {
   fill: none;
   stroke: var(--line);
-  stroke-width: 1;
+  stroke-width: 0.8;
 }
 
 .diagram .label {
   fill: var(--muted);
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  font-family: var(--font-body);
+  font-size: 12px;
 }
 
 .diagram .reg rect,
 .diagram .cell rect {
   fill: var(--bg);
   stroke: var(--line);
-  stroke-width: 1;
-  transition: fill 0.25s, stroke 0.25s;
+  stroke-width: 0.8;
+  transition: fill 0.3s, stroke 0.3s;
 }
 
 .diagram .reg.on rect,
 .diagram .cell.on rect {
   fill: var(--on-soft);
   stroke: var(--on);
-  stroke-width: 2;
+  stroke-width: 1.2;
 }
 
 .diagram .regName {
   fill: var(--muted);
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-family: var(--font-body);
+  font-size: 10.5px;
 }
 
 .diagram .regValue,
@@ -692,28 +546,28 @@ code {
 }
 
 .diagram .cellText {
-  font-size: 11px;
+  font-size: 10.5px;
 }
 
 .diagram .bus line {
   stroke: var(--line);
-  stroke-width: 1.5;
-  transition: stroke 0.25s, stroke-width 0.25s;
+  stroke-width: 1;
+  transition: stroke 0.3s, stroke-width 0.3s;
 }
 
 .diagram .bus.on line {
   stroke: var(--on);
-  stroke-width: 3;
+  stroke-width: 2;
 }
 
 .diagram .interrupt line {
-  stroke-dasharray: 5 4;
+  stroke-dasharray: 4 4;
 }
 
 .diagram .busLabel {
   fill: var(--muted);
-  font-family: var(--font-mono);
-  font-size: 10px;
+  font-family: var(--font-body);
+  font-size: 10.5px;
 }
 
 .diagram .bus.on .busLabel {
@@ -722,32 +576,33 @@ code {
 
 /* --- step description ------------------------------------------------------------- */
 .stepBox {
-  position: relative;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-left: 2px solid var(--on);
-  border-radius: var(--radius);
-  padding: 18px 22px;
-  margin-top: 16px;
+  background: transparent;
+  border: none;
+  border-top: 1px solid var(--line);
+  border-radius: 0;
+  padding: 22px 0 8px;
+  margin-top: 24px;
   min-height: 140px;
 }
 
 .stepCount {
   margin: 0;
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  color: var(--muted);
+  font-size: 0.78rem;
+  color: var(--on);
+  letter-spacing: 0.02em;
 }
 
 .stepBox h2 {
-  margin: 6px 0 8px;
-  font-size: 1.2rem;
+  margin: 8px 0 10px;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.75rem;
+  letter-spacing: -0.01em;
 }
 
 .stepBox p {
   margin: 0;
+  max-width: 68ch;
 }
 
 /* --- controls --------------------------------------------------------------------- */
@@ -756,75 +611,70 @@ code {
   gap: 8px;
   align-items: center;
   flex-wrap: wrap;
-  margin: 16px 0;
+  margin: 20px 0;
 }
 
 button,
 select {
   font: inherit;
-  font-size: 0.92rem;
+  font-size: 0.88rem;
   padding: 8px 16px;
-  border-radius: var(--radius);
+  border-radius: 999px;
   border: 1px solid var(--line);
   background: transparent;
   color: var(--text);
   cursor: pointer;
-  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
 }
 
 select {
+  border-radius: var(--radius);
   background: var(--surface);
+  padding-right: 10px;
 }
 
 button:hover:not(:disabled) {
-  border-color: var(--accent);
-  background: var(--accent-soft);
+  border-color: var(--text);
 }
 
 button:disabled {
-  opacity: 0.35;
+  opacity: 0.3;
   cursor: not-allowed;
 }
 
 button.primary {
-  background: var(--accent);
-  border-color: var(--accent);
+  background: var(--text);
+  border-color: var(--text);
   color: var(--bg);
-  font-weight: 700;
+  font-weight: 500;
 }
 
 button.primary:hover:not(:disabled) {
   background: #fff;
-  color: var(--bg);
 }
 
-/* A link that should look like a button. */
 .button {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px 18px;
-  border-radius: var(--radius);
+  gap: 8px;
+  padding: 11px 22px;
+  border-radius: 999px;
   border: 1px solid var(--line);
   color: var(--text);
   text-decoration: none;
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  transition: background 0.15s, border-color 0.15s;
+  font-size: 0.92rem;
+  transition: background 0.2s, border-color 0.2s;
 }
 
 .button:hover {
-  border-color: var(--accent);
-  background: var(--accent-soft);
+  border-color: var(--text);
 }
 
 .button.primary {
-  background: var(--accent);
-  border-color: var(--accent);
+  background: var(--text);
+  border-color: var(--text);
   color: var(--bg);
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .button.primary:hover {
@@ -835,7 +685,7 @@ button.primary:hover:not(:disabled) {
 .bits {
   display: flex;
   gap: 6px;
-  margin: 24px 0 16px;
+  margin: 28px 0 18px;
   flex-wrap: wrap;
 }
 
@@ -845,31 +695,33 @@ button.primary:hover:not(:disabled) {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
-  padding: 14px 4px 10px;
-  font-family: var(--font-mono);
+  gap: 6px;
+  padding: 16px 4px 12px;
+  border-radius: var(--radius);
   background: var(--surface);
+  border-color: var(--border);
 }
 
 .bitValue {
   font-family: var(--font-display);
-  font-size: 1.6rem;
+  font-size: 2rem;
   line-height: 1;
 }
 
 .bitWeight {
-  font-size: 0.68rem;
+  font-size: 0.7rem;
   color: var(--muted);
+  font-family: var(--font-mono);
 }
 
 .bit.one {
-  background: var(--accent);
-  border-color: var(--accent);
+  background: var(--text);
+  border-color: var(--text);
   color: var(--bg);
 }
 
 .bit.one .bitWeight {
-  color: var(--surface-4);
+  color: #6b675f;
 }
 
 .bit.signBit {
@@ -882,63 +734,49 @@ button.primary:hover:not(:disabled) {
   color: var(--bg);
 }
 
-/* --- readout: panels that step lighter, like the stat slides ------------------------ */
+/* --- readout ---------------------------------------------------------------------- */
 .readout {
   display: flex;
-  gap: 0;
   flex-wrap: wrap;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--border);
 }
 
 .readout > div {
   flex: 1 1 170px;
-  background: var(--surface);
-  padding: 16px 18px 18px;
-  border-right: 1px solid var(--border);
+  padding: 18px 20px 20px 0;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 18px;
-  min-height: 116px;
+  gap: 14px;
 }
 
-.readout > div:nth-child(2) {
-  background: var(--surface-2);
-}
-
-.readout > div:nth-child(3) {
-  background: var(--surface-3);
-}
-
-.readout > div:nth-child(4) {
-  background: var(--surface-4);
-}
-
-.readout > div:last-child {
-  border-right: none;
+.readout > div + div {
+  padding-left: 20px;
+  border-left: 1px solid var(--border);
 }
 
 .readoutLabel {
   display: block;
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: 0.8rem;
   color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-}
-
-.readout > div:nth-child(4) .readoutLabel {
-  color: #c4c4cc;
 }
 
 .readoutValue {
   display: block;
   font-family: var(--font-display);
-  font-size: clamp(1.4rem, 3vw, 2rem);
-  line-height: 1.1;
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
   overflow-wrap: anywhere;
+}
+
+@media (max-width: 600px) {
+  .readout > div + div {
+    padding-left: 0;
+    border-left: none;
+    border-top: 1px solid var(--border);
+  }
 }
 
 /* --- the negate trick / try-this panels -------------------------------------------- */
@@ -946,17 +784,16 @@ button.primary:hover:not(:disabled) {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: 20px 24px;
-  margin-top: 16px;
+  padding: 24px 28px;
+  margin-top: 24px;
 }
 
 .trick h2 {
   margin-top: 0;
   font-family: var(--font-display);
   font-weight: 400;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  font-size: 0.95rem;
+  font-size: 1.6rem;
+  letter-spacing: -0.01em;
 }
 
 .trick table {
@@ -966,7 +803,7 @@ button.primary:hover:not(:disabled) {
 
 .trick th {
   text-align: left;
-  font-weight: 500;
+  font-weight: 400;
   color: var(--muted);
   padding: 6px 16px 6px 0;
   font-size: 0.9rem;
@@ -978,7 +815,7 @@ button.primary:hover:not(:disabled) {
 
 .mono {
   font-family: var(--font-mono);
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
 }
 
 /* --- forms ------------------------------------------------------------------------ */
@@ -990,10 +827,7 @@ form {
 }
 
 label {
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  font-size: 0.82rem;
   color: var(--muted);
 }
 
@@ -1002,76 +836,53 @@ input {
   padding: 10px 12px;
   border-radius: var(--radius);
   border: 1px solid var(--line);
-  background: var(--bg);
+  background: transparent;
   color: var(--text);
 }
 
 input:focus {
-  outline: 2px solid var(--on);
-  outline-offset: 1px;
+  outline: none;
+  border-color: var(--on);
 }
 
 form button {
-  margin-top: 10px;
+  margin-top: 12px;
   justify-self: start;
 }
 
 /* --- footers ---------------------------------------------------------------------- */
 .lessonLinks {
   display: flex;
-  gap: 12px;
-  padding-top: 20px;
-  border-top: 1px solid var(--line);
-  margin-top: 32px;
+  gap: 28px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+  margin-top: 40px;
   flex-wrap: wrap;
 }
 
 .lessonLinks a {
-  display: inline-flex;
-  align-items: center;
-  padding: 10px 18px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
   color: var(--text);
   text-decoration: none;
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  transition: background 0.15s, border-color 0.15s;
-}
-
-.lessonLinks a:first-child {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: var(--bg);
-  font-weight: 600;
+  font-size: 0.95rem;
+  padding-bottom: 2px;
+  border-bottom: 1px solid var(--line);
+  transition: border-color 0.2s, color 0.2s;
 }
 
 .lessonLinks a:hover {
-  border-color: var(--accent);
-  background: var(--accent-soft);
-}
-
-.lessonLinks a:first-child:hover {
-  background: #fff;
+  border-color: var(--on);
+  color: var(--on);
 }
 
 .siteFooter {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-top: 72px;
-  padding-top: 18px;
-  border-top: 1px solid var(--line);
+  margin-top: 96px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
 }
 
 .siteFooter p {
   margin: 0;
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font-size: 0.82rem;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1099,9 +910,9 @@ form button {
   margin: 0 0 14px;
   font-family: var(--font-display);
   font-weight: 400;
-  text-transform: uppercase;
-  font-size: clamp(1.5rem, 4.4vw, 2.6rem);
-  letter-spacing: 0.02em;
+  font-size: clamp(2.3rem, 5.4vw, 3.8rem);
+  line-height: 1.02;
+  letter-spacing: -0.01em;
   overflow-wrap: break-word;
 }
 
@@ -1766,10 +1577,9 @@ form button {
 }
 
 .configLabel {
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  font-family: var(--font-label);
+  font-size: 0.82rem;
+  letter-spacing: 0;
   color: var(--muted);
 }
 
@@ -1859,10 +1669,9 @@ button.toggle.on {
 .sectionTitle {
   font-family: var(--font-display);
   font-weight: 400;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  font-size: 1.05rem;
-  margin: 40px 0 6px;
+  letter-spacing: -0.01em;
+  font-size: 1.9rem;
+  margin: 48px 0 6px;
 }
 
 .timingWrap {
@@ -1964,9 +1773,8 @@ button.toggle.on {
   margin: 0 0 16px;
   font-family: var(--font-display);
   font-weight: 400;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  font-size: 0.95rem;
+  letter-spacing: -0.01em;
+  font-size: 1.7rem;
 }
 
 .requestForm {
@@ -1983,10 +1791,9 @@ button.toggle.on {
 }
 
 .requestForm legend {
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  font-family: var(--font-label);
+  font-size: 0.82rem;
+  letter-spacing: 0;
   color: var(--muted);
   margin-bottom: 8px;
 }

@@ -8,7 +8,6 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import ExplodedStack from '../components/ExplodedStack.jsx';
-import Wires from '../components/Wires.jsx';
 import { api } from '../lib/api.js';
 
 // The lessons that actually exist. Everything else routes to a placeholder until the
@@ -38,21 +37,11 @@ export function Home() {
   return (
     <section>
       <header className="hero">
-        <div className="heroBar" aria-hidden="true">
-          <span>Fetch</span>
-          <span>Decode</span>
-          <span>Execute</span>
-          <span>Repeat</span>
-        </div>
-
         <div className="heroText">
           <p className="eyebrow">Computer Organization Principles · UCU</p>
-          <h1>The computer, taken apart</h1>
-          <div className="heroMarks" aria-hidden="true">
-            <span className="px" />
-            <span className="px" />
-          </div>
-          <p className="heroTagline">Every instruction has a route.</p>
+          <h1>
+            The computer, <em>taken apart.</em>
+          </h1>
           <p className="lede">
             Short, clickable explanations of the parts of the course that are hard to hold in
             your head. Change the parameters, watch what moves, then practise on questions
@@ -60,7 +49,7 @@ export function Home() {
           </p>
           <div className="heroActions">
             <Link className="button primary" to="/topics/instruction-cycle">
-              Start with the cycle →
+              Begin with the cycle
             </Link>
             <Link className="button" to="/quiz/practice">
               Random practice
@@ -71,15 +60,13 @@ export function Home() {
         <div className="heroArt">
           <ExplodedStack />
         </div>
-
-        <Wires />
       </header>
 
       <div className="sectionHead">
         <h2>Topics</h2>
         {topics.length > 0 && (
           <span>
-            {String(ready).padStart(2, '0')} / {String(topics.length).padStart(2, '0')} ready
+            {ready} of {topics.length} ready
           </span>
         )}
       </div>
@@ -98,7 +85,7 @@ export function Home() {
           const built = BUILT.has(topic.id);
           return (
             <li key={topic.id} className={built ? 'built' : 'pending'}>
-              <span className="topicIndex">{String(index + 1).padStart(2, '0')}</span>
+              <span className="topicIndex">{index + 1}</span>
               <div>
                 <h2>
                   <Link to={`/topics/${topic.id}`}>{topic.title}</Link>
@@ -106,13 +93,7 @@ export function Home() {
                 <p>{topic.cheatSheet}</p>
               </div>
               <span className="topicState">
-                {built ? (
-                  <>
-                    Open <span aria-hidden="true">→</span>
-                  </>
-                ) : (
-                  'Coming soon'
-                )}
+                {built ? <span aria-hidden="true">→</span> : 'Coming soon'}
               </span>
             </li>
           );

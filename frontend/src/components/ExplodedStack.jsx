@@ -1,9 +1,9 @@
 // The hero picture: a chip taken apart into the memory hierarchy.
 //
 // Five isometric slabs, smallest and fastest on top, largest and slowest at the bottom,
-// drawn in plain SVG. They start stacked and slide apart once the page has loaded, and a
-// highlight walks down the layers the way a lookup falls through on a miss. Hovering a
-// layer (or focusing it with the keyboard) holds the highlight there.
+// drawn in plain SVG. They start stacked and slide apart once the page has loaded.
+// Hovering a layer (or focusing it with the keyboard) picks it out; nothing moves on its
+// own after that, so the picture never competes with the text beside it.
 //
 // Everything is computed from the LAYERS table, so the picture is the data: change a size
 // or a latency there and the drawing follows.
@@ -102,7 +102,6 @@ function Slab({ layer, index }) {
 
 export function ExplodedStack() {
   const [spread, setSpread] = useState(0);
-  const [hot, setHot] = useState(0);
   const [held, setHeld] = useState(null);
 
   // Explode once, just after the first paint, so the transition is visible.
@@ -111,15 +110,7 @@ export function ExplodedStack() {
     return () => clearTimeout(timer);
   }, []);
 
-  // The highlight falls through the levels like a lookup that keeps missing.
-  useEffect(() => {
-    const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
-    if (reduced || held !== null) return undefined;
-    const timer = setInterval(() => setHot((value) => (value + 1) % LAYERS.length), 1800);
-    return () => clearInterval(timer);
-  }, [held]);
-
-  const active = held ?? hot;
+  const active = held;
 
   return (
     <svg
@@ -176,7 +167,7 @@ export function ExplodedStack() {
                   {`0${i + 1} / 0${LAYERS.length}`}
                 </text>
                 <text x={LABEL_X} y={4} className="stackName">
-                  {layer.name.toUpperCase()}
+                  {layer.name}
                 </text>
                 <text x={LABEL_X} y={23} className="stackMeta">
                   {layer.meta}
