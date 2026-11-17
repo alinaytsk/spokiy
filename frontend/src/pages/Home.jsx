@@ -1,8 +1,8 @@
 // The home page: the scroll-driven 3D hero, then the topic list read from the API, so
 // adding a topic is a backend change only.
 //
-// Home is the one light page. It switches the body to the light palette while mounted and
-// back when you leave, so lessons, quiz and the rest keep the dark theme.
+// Home marks the body with .home while mounted, which lets the nav float over the
+// full-screen scene instead of pushing it down.
 //
 // The list is laid out like a spec table - index, title, one-line idea, state - because
 // it is one: five topics, which are ready, which are coming.
@@ -38,8 +38,8 @@ export function Home() {
   }, []);
 
   useEffect(() => {
-    document.body.classList.add('light');
-    return () => document.body.classList.remove('light');
+    document.body.classList.add('home');
+    return () => document.body.classList.remove('home');
   }, []);
 
   const ready = topics.filter((topic) => BUILT.has(topic.id)).length;

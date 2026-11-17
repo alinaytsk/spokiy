@@ -46,7 +46,6 @@ import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeom
 
 import { boardTextures, brushedTexture, chipTexture } from './textures.js';
 
-const BG = '#e9e9e6';
 const BOARD_W = 10;
 const BOARD_D = 6.5;
 
@@ -85,12 +84,14 @@ export function createScene(canvas) {
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.outputColorSpace = SRGBColorSpace;
   renderer.toneMapping = ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.05;
+  renderer.toneMappingExposure = 1.15;
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = PCFSoftShadowMap;
 
+  // The page background, read from the design tokens so the scene always matches it.
+  const bg = getComputedStyle(document.body).getPropertyValue('--bg').trim() || '#0c0c0b';
   const scene = new Scene();
-  scene.background = new Color(BG);
+  scene.background = new Color(bg);
 
   // Studio reflections: what makes the metal read as metal.
   const pmrem = new PMREMGenerator(renderer);
@@ -101,7 +102,7 @@ export function createScene(canvas) {
   const camera = new PerspectiveCamera(30, 1, 0.1, 200);
 
   // --- light ---------------------------------------------------------------------------
-  scene.add(new HemisphereLight('#ffffff', '#c9c9c4', 0.6));
+  scene.add(new HemisphereLight('#ffffff', '#1a1a18', 0.45));
   const key = new DirectionalLight('#ffffff', 2.2);
   key.position.set(-8, 18, 10);
   key.castShadow = true;
@@ -115,7 +116,13 @@ export function createScene(canvas) {
   key.shadow.radius = 6;
   scene.add(key);
 
-  const ground = new Mesh(new PlaneGeometry(80, 80), new ShadowMaterial({ opacity: 0.14 }));
+  // A cool rim light from behind: on a dark ground it is what separates the edges of
+  // each layer from the background.
+  const rim = new DirectionalLight('#dfe6ff', 1.6);
+  rim.position.set(10, 9, -14);
+  scene.add(rim);
+
+  const ground = new Mesh(new PlaneGeometry(80, 80), new ShadowMaterial({ opacity: 0.55 }));
   ground.rotation.x = -Math.PI / 2;
   ground.position.y = -0.32;
   ground.receiveShadow = true;

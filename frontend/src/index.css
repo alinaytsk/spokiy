@@ -227,35 +227,12 @@ code {
   }
 }
 
-/* --- home: light palette ---------------------------------------------------------- */
-/* Home sets body.light while mounted; every token flips, the rest of the CSS follows. */
-body.light {
-  --bg: #e9e9e6;
-  --bg-raise: #efefec;
-  --surface: #f3f3f0;
-  --surface-2: #eeeeea;
-  --surface-3: #e6e6e2;
-  --surface-4: #dcdcd7;
-  --border: rgba(17, 17, 16, 0.09);
-  --line: rgba(17, 17, 16, 0.18);
-  --text: #121211;
-  --muted: #6d6c68;
-  --accent: #121211;
-  --accent-soft: rgba(17, 17, 16, 0.04);
-  --on: #8a6a2c;
-  --on-soft: rgba(138, 106, 44, 0.12);
-
-  color-scheme: light;
-  background: var(--bg);
-  color: var(--text);
-}
-
 /* On home the nav floats over the full-screen scene instead of pushing it down. */
-body.light .shell {
+body.home .shell {
   position: relative;
 }
 
-body.light .nav {
+body.home .nav {
   position: absolute;
   top: 0;
   left: 32px;
@@ -266,7 +243,7 @@ body.light .nav {
 }
 
 @media (max-width: 600px) {
-  body.light .nav {
+  body.home .nav {
     left: 18px;
     right: 18px;
   }
