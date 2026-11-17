@@ -6,11 +6,11 @@
       "prompt": "A system bus is usually described as three buses. Which?",
       "options": [
         "Input, output and control",
-        "Address, data and control",
         "Read, write and clock",
+        "Address, data and control",
         "Internal, external and expansion"
       ],
-      "correctIndex": 1,
+      "correctIndex": 2,
       "explanation": "The address bus says where, the data bus carries what, and the control bus says when and in which direction."
     },
     {
@@ -18,23 +18,23 @@
       "prompt": "What does the width of the address bus determine?",
       "options": [
         "How fast memory can be read",
-        "How much memory can be addressed",
         "How many devices can interrupt",
-        "How many bits each transfer carries"
+        "How many bits each transfer carries",
+        "How much memory can be addressed"
       ],
-      "correctIndex": 1,
+      "correctIndex": 3,
       "explanation": "An n-bit address bus can name 2^n locations. The data bus width is what decides how many bits move per transfer - a different question."
     },
     {
       "id": "bi-3",
       "prompt": "What is the main advantage of interrupt-driven I/O over polling?",
       "options": [
-        "It transfers data faster once started",
         "The CPU does useful work instead of asking the device repeatedly",
+        "It transfers data faster once started",
         "It needs no device driver",
         "It cannot be interrupted by other devices"
       ],
-      "correctIndex": 1,
+      "correctIndex": 0,
       "explanation": "Polling burns cycles asking a device that is usually not ready. With interrupts the device speaks when it has something to say, and the CPU is free until then."
     },
     {
@@ -54,11 +54,11 @@
       "prompt": "Why does DMA exist when interrupt-driven I/O already frees the CPU from waiting?",
       "options": [
         "Because interrupts are unreliable",
-        "Because the CPU still copies every word by hand under interrupt-driven I/O",
         "Because DMA is faster than the bus",
+        "Because the CPU still copies every word by hand under interrupt-driven I/O",
         "Because interrupts cannot be used with disks"
       ],
-      "correctIndex": 1,
+      "correctIndex": 2,
       "explanation": "Interrupt-driven I/O frees the CPU from waiting, not from working: it still executes an instruction per word transferred. DMA hands the whole block to a controller that moves it over the bus directly, and interrupts the CPU once at the end.",
       "tricky": true
     },
@@ -68,10 +68,10 @@
       "options": [
         "It is ignored, like any other interrupt",
         "It is queued until interrupts are enabled again",
-        "It is serviced anyway: that is what non-maskable means",
-        "It causes the processor to reset"
+        "It causes the processor to reset",
+        "It is serviced anyway: that is what non-maskable means"
       ],
-      "correctIndex": 2,
+      "correctIndex": 3,
       "explanation": "Maskable interrupts can be switched off; a non-maskable one cannot, because it signals something that cannot wait - power failure, a memory parity error. It still waits for the current instruction to finish, but the disable flag does not apply to it.",
       "tricky": true
     }

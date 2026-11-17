@@ -29,24 +29,24 @@
       "id": "ic-3",
       "prompt": "During fetch, what is placed on the address bus?",
       "options": [
-        "The contents of the MAR",
         "The contents of the IR",
         "The contents of the MDR",
-        "The opcode of the instruction"
+        "The opcode of the instruction",
+        "The contents of the MAR"
       ],
-      "correctIndex": 0,
+      "correctIndex": 3,
       "explanation": "The PC is copied into the memory address register, and it is the MAR that drives the address bus. The value coming back from memory lands in the MDR."
     },
     {
       "id": "ic-4",
       "prompt": "At what point in the cycle is the program counter incremented?",
       "options": [
-        "After the instruction has finished executing",
         "During fetch, before the instruction has been decoded",
+        "After the instruction has finished executing",
         "Only when the instruction is a jump",
         "At the very end, during the interrupt check"
       ],
-      "correctIndex": 1,
+      "correctIndex": 0,
       "explanation": "The PC is incremented during fetch, long before the CPU knows what the instruction does. This is why a jump instruction has to overwrite the PC during execute: by then it has already been pointed at the following instruction.",
       "tricky": true
     },

@@ -1,18 +1,23 @@
 // Routes and the shell around them.
 //
-// Only two lesson routes point at real components - the two I own. The rest render
-// <Placeholder> and are the lines my teammates replace with their own pages.
+// Lesson routes that still render <Placeholder> are the lines a teammate replaces with
+// their own page.
 
 import { Link, Route, Routes } from 'react-router-dom';
 
 import { useAuth } from './auth/context.js';
 import ProtectedRoute from './auth/ProtectedRoute.jsx';
 import Home from './pages/Home.jsx';
+import CheatSheet from './pages/CheatSheet.jsx';
 import Placeholder from './pages/Placeholder.jsx';
+import Progress from './pages/Progress.jsx';
+import Quiz from './pages/Quiz.jsx';
 import RequestTopic from './pages/RequestTopic.jsx';
 import SignIn from './pages/SignIn.jsx';
 import SignUp from './pages/SignUp.jsx';
+import CacheHitMiss from './pages/topics/CacheHitMiss.jsx';
 import InstructionCycle from './pages/topics/InstructionCycle.jsx';
+import MemoryHierarchy from './pages/topics/MemoryHierarchy.jsx';
 import NumberRepresentation from './pages/topics/NumberRepresentation.jsx';
 import Pipelining from './pages/topics/Pipelining.jsx';
 
@@ -25,6 +30,7 @@ function Nav() {
         sPOKiy
       </Link>
       <span className="spacer" />
+      <Link to="/quiz/practice">Practice</Link>
       <Link to="/cheat-sheet">Cheat sheets</Link>
       <Link to="/progress">Progress</Link>
       <Link to="/requests">Request a topic</Link>
@@ -57,17 +63,18 @@ export function App() {
         <Routes>
           <Route path="/" element={<Home />} />
 
-          {/* --- my lessons ------------------------------------------------------------ */}
+          {/* --- Alina's lessons --------------------------------------------------------- */}
           <Route path="/topics/instruction-cycle" element={<InstructionCycle />} />
           <Route path="/topics/number-representation" element={<NumberRepresentation />} />
 
+          {/* --- Sofia's lesson -------------------------------------------------------- */}
           <Route path="/topics/pipelining" element={<Pipelining />} />
 
-          {/* --- teammates' lessons: replace these two --------------------------------- */}
-          <Route
-            path="/topics/cache-memory-hierarchy"
-            element={<Placeholder what="Cache and memory hierarchy lesson" />}
-          />
+          {/* --- Mykhailo's lessons: the cache topic, in two parts ---------------------- */}
+          <Route path="/topics/cache-memory-hierarchy" element={<MemoryHierarchy />} />
+          <Route path="/topics/cache-memory-hierarchy/cache" element={<CacheHitMiss />} />
+
+          {/* --- still to be built: replace this one ----------------------------------- */}
           <Route
             path="/topics/buses-interrupts"
             element={<Placeholder what="Buses and interrupts lesson" />}
@@ -77,27 +84,14 @@ export function App() {
               who are signed out to sign in before voting. */}
           <Route path="/requests" element={<RequestTopic />} />
 
-          {/* --- teammates' pages ------------------------------------------------------ */}
-          <Route
-            path="/quiz/:topicId"
-            element={
-              <Placeholder
-                what="Quiz"
-                api="GET /topics/:id/quiz · POST /topics/:id/quiz/grade"
-              />
-            }
-          />
-          <Route
-            path="/cheat-sheet"
-            element={<Placeholder what="Cheat sheets" api="GET /topics/:id/cheat-sheet" />}
-          />
+          {/* --- quiz and cheat sheets (Mykhailo) -------------------------------------- */}
+          {/* /quiz/practice is a random mix of every topic; see Quiz.jsx. */}
+          <Route path="/quiz/:topicId" element={<Quiz />} />
+          <Route path="/cheat-sheet" element={<CheatSheet />} />
 
           {/* Progress needs a signed-in user: the API reads the token to know whose it is. */}
           <Route element={<ProtectedRoute />}>
-            <Route
-              path="/progress"
-              element={<Placeholder what="Your progress" api="GET/POST /progress" />}
-            />
+            <Route path="/progress" element={<Progress />} />
           </Route>
 
           {/* --- auth ------------------------------------------------------------------ */}
