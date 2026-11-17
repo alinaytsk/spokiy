@@ -47,7 +47,7 @@
         "100 ns"
       ],
       "correctIndex": 2,
-      "explanation": "1 + 0.05 x 100 = 6 ns. The lesson is how heavily the rare miss dominates: at a 95% hit rate the cache is still six times slower than its hit time, and going from 95% to 99% nearly halves the average.",
+      "explanation": "1 + 0.05 x 100 = 6 ns. The lesson is how heavily the rare miss dominates: at a 95% hit rate the cache is still six times slower than its hit time, and going from 95% to 99% cuts the average to a third (1 + 0.01 x 100 = 2 ns).",
       "tricky": true
     },
     {
@@ -110,7 +110,7 @@
         "Registers"
       ],
       "correctIndex": 0,
-      "explanation": "DRAM keeps each bit as charge on a tiny capacitor, which leaks; every row is rewritten every few milliseconds. That one-transistor-one-capacitor cell is why DRAM is dense and cheap, and the refresh plus the read sensing is part of why it is slow. SRAM uses six transistors per bit and holds its value as long as it has power."
+      "explanation": "DRAM keeps each bit as charge on a tiny capacitor, which leaks; every row is rewritten roughly every 64 ms. That one-transistor-one-capacitor cell is why DRAM is dense and cheap, and the refresh plus the read sensing is part of why it is slow. SRAM uses six transistors per bit and holds its value as long as it has power."
     },
     {
       "id": "cm-10",
@@ -135,7 +135,7 @@
         "About four months"
       ],
       "correctIndex": 3,
-      "explanation": "10 ms is 10,000,000 ns, so 10,000,000 s - about 116 days. On the same scale an L1 hit is one second and a RAM access is a minute and a half. That gap is the whole reason the hierarchy exists."
+      "explanation": "10 ms is 10,000,000 ns, so 10,000,000 s - about 116 days. On the same scale an L1 hit is one second and a RAM access is over a minute. That gap is the whole reason the hierarchy exists."
     },
     {
       "id": "cm-12",

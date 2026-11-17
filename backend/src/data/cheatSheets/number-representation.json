@@ -21,7 +21,7 @@
     {
       "heading": "Patterns worth recognising",
       "points": [
-        "11111111 = -1 at any width.",
+        "All ones is -1 at any width (11111111 in 8 bits).",
         "10000000 = -128 in 8 bits: the most negative value, with no positive twin.",
         "Sign extension copies the sign bit into the new high bits."
       ]
