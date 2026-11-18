@@ -120,6 +120,44 @@ the CloudFront cache is invalidated so the new site shows up within a minute or 
 
 `npm run diff` shows what a deploy would change without changing it.
 
+## Optional: "Continue with Google"
+
+E-mail + password always works. Google sign-in sits next to it and stays off until a
+Google OAuth client exists. Turning it on is three steps; the client **secret** never goes
+into this repository.
+
+**1. Create the OAuth client** in [Google Cloud Console](https://console.cloud.google.com/):
+
+- Create a project (or pick one) → **APIs & Services → OAuth consent screen**:
+  External, app name `sPOKiy`, your e-mail as support and developer contact. Scopes: the
+  default `email`, `profile`, `openid` only. Then **Publish app** — with only these basic
+  scopes Google does not require review, and until it is published only listed test users
+  can sign in.
+- **Credentials → Create credentials → OAuth client ID** → *Web application*.
+  **Authorized redirect URIs**: the `GoogleRedirectUri` output of the stack, e.g.
+  `https://spokiy-xxxxxxxxxx.auth.eu-central-1.amazoncognito.com/oauth2/idpresponse`.
+  Leave JavaScript origins empty.
+
+**2. Store the secret and the ID:**
+
+```bash
+# the secret, in Secrets Manager (do not commit it, do not paste it in chat)
+aws secretsmanager create-secret --region eu-central-1   --name spokiy/google-client-secret --secret-string "<client secret>"
+```
+
+and put the **client ID** (it is public) in `infra/cdk.json`:
+
+```json
+"googleClientId": "1234-abc.apps.googleusercontent.com",
+```
+
+**3. Deploy:** `npm run deploy`. The `GoogleSignIn` output changes to `enabled`, and the
+button appears on the sign-in and sign-up pages.
+
+Note: a person who signs up with e-mail and later uses Google with the same address gets
+two separate accounts (and two progress histories). Linking them needs a pre-sign-up
+Lambda; not done yet.
+
 ## Running the frontend locally against the deployed API
 
 Useful for teammates who want real sign-in and real tables while working on a page. Put

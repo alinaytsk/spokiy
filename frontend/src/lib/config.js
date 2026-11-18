@@ -38,3 +38,11 @@ export function getConfig() {
 export function isAuthConfigured(config = cached) {
   return Boolean(config?.userPoolId && config?.userPoolClientId);
 }
+
+/**
+ * True when the deploy turned on "Continue with Google" (googleClientId in infra/cdk.json)
+ * and gave us the Cognito domain the OAuth redirect goes through.
+ */
+export function isGoogleEnabled(config = cached) {
+  return Boolean(isAuthConfigured(config) && config?.googleEnabled && config?.oauthDomain);
+}

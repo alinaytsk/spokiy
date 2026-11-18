@@ -1919,3 +1919,44 @@ label.choice.donate {
   border-radius: 999px;
   transition: width 0.3s;
 }
+
+/* --- sign in with Google ------------------------------------------------------------ */
+.oauth {
+  max-width: 360px;
+  margin: 20px 0 4px;
+}
+
+.googleButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 11px 16px;
+  background: var(--text);
+  border-color: var(--text);
+  color: var(--bg);
+  font-weight: 500;
+}
+
+.googleButton:hover:not(:disabled) {
+  opacity: 0.88;
+  border-color: var(--text);
+}
+
+.oauthDivider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 18px 0 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.oauthDivider::before,
+.oauthDivider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}

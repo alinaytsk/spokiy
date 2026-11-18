@@ -4,7 +4,7 @@
 // component and a plain function in one file is what trips react/only-export-components
 // and breaks Fast Refresh.
 
-import { getCurrentUser } from 'aws-amplify/auth';
+import { fetchUserAttributes, getCurrentUser } from 'aws-amplify/auth';
 
 import { isAuthConfigured } from '../lib/config.js';
 
@@ -17,7 +17,16 @@ export async function loadCurrentUser() {
 
   try {
     const current = await getCurrentUser();
-    return { username: current.username, userId: current.userId };
+    // Google users have a username like "google_1048...", so show their e-mail instead.
+    let email = current.signInDetails?.loginId;
+    if (!email) {
+      try {
+        email = (await fetchUserAttributes()).email;
+      } catch {
+        email = undefined;
+      }
+    }
+    return { username: email || current.username, userId: current.userId };
   } catch {
     // getCurrentUser throws when nobody is signed in. That is not an error here.
     return null;

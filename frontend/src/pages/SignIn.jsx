@@ -2,9 +2,10 @@ import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import { useAuth } from '../auth/context.js';
+import GoogleButton from '../components/GoogleButton.jsx';
 
 export function SignIn() {
-  const { signIn, configured } = useAuth();
+  const { signIn, configured, redirectError } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -49,6 +50,10 @@ export function SignIn() {
           <code> AUTH_BYPASS=true</code> and every page will work signed out.
         </p>
       )}
+
+      {redirectError && <p className="error">{redirectError}</p>}
+
+      <GoogleButton />
 
       <form onSubmit={handleSubmit}>
         <label htmlFor="email">E-mail</label>

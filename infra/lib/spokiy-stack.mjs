@@ -21,11 +21,12 @@
 //    accounts, votes and feedback from the live test, which the report depends on. The
 //    bucket only holds build output and is deleted with the stack.
 
+import { createHash } from 'node:crypto';
 import { existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { Annotations, CfnOutput, Duration, RemovalPolicy, Stack } from 'aws-cdk-lib';
+import { Annotations, CfnOutput, Duration, RemovalPolicy, SecretValue, Stack, Token } from 'aws-cdk-lib';
 import { HttpApi } from 'aws-cdk-lib/aws-apigatewayv2';
 import { HttpLambdaIntegration } from 'aws-cdk-lib/aws-apigatewayv2-integrations';
 import {
@@ -38,6 +39,10 @@ import {
 import { S3BucketOrigin } from 'aws-cdk-lib/aws-cloudfront-origins';
 import {
   AccountRecovery,
+  OAuthScope,
+  ProviderAttribute,
+  UserPoolClientIdentityProvider,
+  UserPoolIdentityProviderGoogle,
   UserPool,
   UserPoolClient,
   VerificationEmailStyle,
@@ -56,6 +61,9 @@ const frontendDist = join(repoRoot, 'frontend', 'dist');
 // The local dev server, allowed as a CORS origin so teammates can point `npm run dev` at
 // the deployed API. CORS is not what protects the private routes - the Cognito token is.
 const LOCAL_DEV_ORIGIN = 'http://localhost:5173';
+
+// Where the Google OAuth client secret lives (Secrets Manager, plain string).
+const GOOGLE_SECRET_NAME = 'spokiy/google-client-secret';
 
 export class SpokiyStack extends Stack {
   constructor(scope, id, props) {
@@ -90,15 +98,38 @@ export class SpokiyStack extends Stack {
       removalPolicy: RemovalPolicy.RETAIN,
     });
 
-    // A browser cannot keep a secret, so no client secret. SRP is what aws-amplify/auth
-    // uses by default for signIn().
-    const userPoolClient = new UserPoolClient(this, 'WebClient', {
-      userPool,
-      userPoolClientName: 'spokiy-web',
-      generateSecret: false,
-      authFlows: { userSrp: true },
-      preventUserExistenceErrors: true,
-    });
+    // --- Google sign-in (optional) --------------------------------------------------
+    //
+    // Off until `googleClientId` is filled in cdk.json. The client ID is public anyway (it
+    // appears in the browser's address bar during sign-in); the client secret is not, so
+    // it is read at deploy time from Secrets Manager under GOOGLE_SECRET_NAME and never
+    // appears in this repository or in the synthesized template. See infra/README.md.
+    const googleClientId = this.node.tryGetContext('googleClientId') || '';
+    const googleEnabled = googleClientId.trim().length > 0;
+
+    // The hosted domain Google redirects back to. The prefix must be unique across AWS,
+    // so it is derived from the account id (hashed, so the id itself is not published).
+    const domainPrefix = Token.isUnresolved(this.account)
+      ? 'spokiy-auth'
+      : `spokiy-${createHash('sha256').update(this.account).digest('hex').slice(0, 10)}`;
+    userPool.addDomain('AuthDomain', { cognitoDomain: { domainPrefix } });
+    const authDomainName = `${domainPrefix}.auth.${this.region}.amazoncognito.com`;
+
+    let googleProvider = null;
+    if (googleEnabled) {
+      googleProvider = new UserPoolIdentityProviderGoogle(this, 'Google', {
+        userPool,
+        clientId: googleClientId.trim(),
+        clientSecretValue: SecretValue.secretsManager(GOOGLE_SECRET_NAME),
+        scopes: ['openid', 'email', 'profile'],
+        attributeMapping: {
+          email: ProviderAttribute.GOOGLE_EMAIL,
+          emailVerified: ProviderAttribute.GOOGLE_EMAIL_VERIFIED,
+          givenName: ProviderAttribute.GOOGLE_GIVEN_NAME,
+          familyName: ProviderAttribute.GOOGLE_FAMILY_NAME,
+        },
+      });
+    }
 
     // --- DynamoDB --------------------------------------------------------------------
     //
@@ -174,6 +205,33 @@ export class SpokiyStack extends Stack {
     });
 
     const siteUrl = `https://${distribution.distributionDomainName}`;
+
+    // --- the web app client ------------------------------------------------------------
+    //
+    // A browser cannot keep a secret, so no client secret. SRP is what aws-amplify/auth
+    // uses for email + password. The OAuth code flow is what "Continue with Google" uses:
+    // Cognito sends the browser to Google, Google back to Cognito's domain, Cognito back
+    // to the site with a one-time code that Amplify swaps for tokens.
+    const appUrls = [`${siteUrl}/`, `${LOCAL_DEV_ORIGIN}/`];
+    const userPoolClient = new UserPoolClient(this, 'WebClient', {
+      userPool,
+      userPoolClientName: 'spokiy-web',
+      generateSecret: false,
+      authFlows: { userSrp: true },
+      preventUserExistenceErrors: true,
+      supportedIdentityProviders: [
+        UserPoolClientIdentityProvider.COGNITO,
+        ...(googleEnabled ? [UserPoolClientIdentityProvider.GOOGLE] : []),
+      ],
+      oAuth: {
+        flows: { authorizationCodeGrant: true },
+        scopes: [OAuthScope.OPENID, OAuthScope.EMAIL, OAuthScope.PROFILE],
+        callbackUrls: appUrls,
+        logoutUrls: appUrls,
+      },
+    });
+    // The client may only name Google once the provider exists.
+    if (googleProvider) userPoolClient.node.addDependency(googleProvider);
 
     // --- the API ---------------------------------------------------------------------
 
@@ -251,6 +309,8 @@ export class SpokiyStack extends Stack {
         region: this.region,
         userPoolId: userPool.userPoolId,
         userPoolClientId: userPoolClient.userPoolClientId,
+        oauthDomain: authDomainName,
+        googleEnabled,
       }),
     );
 
@@ -272,6 +332,12 @@ export class SpokiyStack extends Stack {
     new CfnOutput(this, 'Region', { value: this.region });
     new CfnOutput(this, 'UserPoolId', { value: userPool.userPoolId });
     new CfnOutput(this, 'UserPoolClientId', { value: userPoolClient.userPoolClientId });
+    new CfnOutput(this, 'AuthDomain', { value: authDomainName });
+    new CfnOutput(this, 'GoogleRedirectUri', {
+      value: `https://${authDomainName}/oauth2/idpresponse`,
+      description: 'Paste into Google Cloud Console as an authorized redirect URI',
+    });
+    new CfnOutput(this, 'GoogleSignIn', { value: googleEnabled ? 'enabled' : 'off (set googleClientId in cdk.json)' });
     new CfnOutput(this, 'TableProgress', { value: progressTable.tableName });
     new CfnOutput(this, 'TableRequests', { value: requestsTable.tableName });
     new CfnOutput(this, 'TableFeedback', { value: feedbackTable.tableName });

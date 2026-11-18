@@ -11,6 +11,7 @@ import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import { useAuth } from '../auth/context.js';
+import GoogleButton from '../components/GoogleButton.jsx';
 
 export function SignUp() {
   const { signUp, confirmSignUp, resendCode, configured } = useAuth();
@@ -80,6 +81,8 @@ export function SignUp() {
           <code> AUTH_BYPASS=true</code> to work on the lessons locally.
         </p>
       )}
+
+      {step === 'details' && <GoogleButton />}
 
       {step === 'details' ? (
         <form onSubmit={handleDetails}>

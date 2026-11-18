@@ -22,9 +22,10 @@ import {
   signIn as amplifySignIn,
   signOut as amplifySignOut,
   resendSignUpCode as amplifyResendSignUpCode,
+  signInWithRedirect,
 } from 'aws-amplify/auth';
 
-import { isAuthConfigured } from '../lib/config.js';
+import { isAuthConfigured, isGoogleEnabled } from '../lib/config.js';
 import { AuthContext } from './context.js';
 import { loadCurrentUser } from './session.js';
 
@@ -34,8 +35,9 @@ function notConfigured() {
   );
 }
 
-export function AuthProvider({ initialUser = null, children }) {
+export function AuthProvider({ initialUser = null, initialError = null, children }) {
   const configured = isAuthConfigured();
+  const googleEnabled = isGoogleEnabled();
 
   const [user, setUser] = useState(initialUser);
   const [pendingUsername, setPendingUsername] = useState(null);
@@ -49,7 +51,17 @@ export function AuthProvider({ initialUser = null, children }) {
     () => ({
       user,
       configured,
+      googleEnabled,
       pendingUsername,
+      // Set when a Google sign-in came back with an error; shown on the sign-in page.
+      redirectError: initialError,
+
+      // Leaves the site: Cognito -> Google -> Cognito -> back here with a code, which
+      // main.jsx finishes before the app renders again.
+      signInWithGoogle: async () => {
+        if (!googleEnabled) notConfigured();
+        await signInWithRedirect({ provider: 'Google' });
+      },
 
       signUp: async (email, password) => {
         if (!configured) notConfigured();
@@ -109,7 +121,7 @@ export function AuthProvider({ initialUser = null, children }) {
         setUser(null);
       },
     }),
-    [user, configured, pendingUsername, refresh],
+    [user, configured, googleEnabled, initialError, pendingUsername, refresh],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
