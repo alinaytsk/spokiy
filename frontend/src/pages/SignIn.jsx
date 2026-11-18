@@ -22,7 +22,12 @@ export function SignIn() {
     setError(null);
     setBusy(true);
     try {
-      await signIn(email, password);
+      const outcome = await signIn(email, password);
+      if (outcome === 'confirm') {
+        // Account exists but was never confirmed: finish it on the code screen.
+        navigate('/sign-up', { state: { confirmEmail: email } });
+        return;
+      }
       navigate(destination, { replace: true });
     } catch (problem) {
       setError(problem.message);
@@ -34,6 +39,10 @@ export function SignIn() {
   return (
     <section className="card">
       <h1>Sign in</h1>
+
+      {location.state?.confirmed && (
+        <p className="notice">Your account is confirmed. Sign in to continue.</p>
+      )}
 
       {!configured && (
         <p className="notice">
