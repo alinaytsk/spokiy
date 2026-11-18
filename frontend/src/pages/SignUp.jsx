@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { useAuth } from '../auth/context.js';
+import GoogleButton from '../auth/GoogleButton.jsx';
 
 export function SignUp() {
   const { signUp, confirmSignUp, configured } = useAuth();
@@ -84,6 +85,7 @@ export function SignUp() {
           <button type="submit" disabled={busy}>
             {busy ? 'Creating…' : 'Create account'}
           </button>
+          <GoogleButton />
         </form>
       ) : (
         <form onSubmit={handleConfirm}>

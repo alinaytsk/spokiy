@@ -1919,3 +1919,24 @@ label.choice.donate {
   border-radius: 999px;
   transition: width 0.3s;
 }
+
+/* --- Google sign-in --------------------------------------------------------------- */
+.altSignIn {
+  display: grid;
+  gap: 6px;
+  max-width: 340px;
+  margin: 8px 0 16px;
+}
+
+.altSignIn p {
+  margin: 0;
+  text-align: center;
+}
+
+.googleButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-weight: 500;
+}

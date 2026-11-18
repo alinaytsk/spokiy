@@ -14,7 +14,7 @@ infra/
 
 | Resource | Details |
 |---|---|
-| **Cognito** user pool `spokiy-users` + app client `spokiy-web` | e-mail is the username; confirmation by e-mailed code; password 8+ characters, no other rules (matches the sign-up form); SRP auth; no client secret |
+| **Cognito** user pool `spokiy-users` + app client `spokiy-web` | e-mail is the username; confirmation by e-mailed code; password 8+ characters, no other rules (matches the sign-up form); SRP auth; no client secret; Google sign-in optional (see below) |
 | **DynamoDB** ×3, on-demand | progress `userId`/`topicId` · requests `topic`/`userId` · feedback `userId`/`createdAt` |
 | **Lambda** `ApiFunction` | Node 22, arm64, 512 MB, handler `lambda.handler`, the `backend/` folder as-is; read/write on the three tables and nothing else |
 | **HTTP API** `spokiy-api` | one catch-all route to the Lambda; Express does the routing and CORS |
@@ -119,6 +119,57 @@ lesson, vote on the Request page.
 the CloudFront cache is invalidated so the new site shows up within a minute or two.
 
 `npm run diff` shows what a deploy would change without changing it.
+
+## Optional: "Continue with Google"
+
+Off by default. Without the variable below the stack is exactly the e-mail-only one (the
+synthesised template is identical), so skipping this section changes nothing.
+
+**1. Google side** — [Google Cloud Console](https://console.cloud.google.com/apis/credentials)
+→ *OAuth consent screen*: External, app name sPOKiy, your e-mail as support and developer
+contact; while the app is in *Testing*, add the test users' Gmail addresses (or *Publish
+app* — with only the `openid email profile` scopes no Google review is needed).
+Then *Credentials → Create credentials → OAuth client ID*, type **Web application**:
+
+| Field | Value |
+|---|---|
+| Authorised JavaScript origins | `https://spokiy-ucu.auth.eu-central-1.amazoncognito.com` |
+| Authorised redirect URIs | `https://spokiy-ucu.auth.eu-central-1.amazoncognito.com/oauth2/idpresponse` |
+
+(If you change `SPOKIY_AUTH_DOMAIN_PREFIX` or the region, change `spokiy-ucu` /
+`eu-central-1` here to match. The deploy prints the exact value as `GoogleRedirectUri`.)
+
+**2. Store the client secret in AWS** — once, never in the repo:
+
+```bash
+aws secretsmanager create-secret --region eu-central-1 \
+  --name spokiy/google-client-secret --secret-string '<client secret>'
+```
+
+**3. Deploy with the client ID:**
+
+```bash
+SPOKIY_GOOGLE_CLIENT_ID=<client id>.apps.googleusercontent.com npm run deploy
+# Windows PowerShell:  $env:SPOKIY_GOOGLE_CLIENT_ID="<client id>"; npm run deploy
+```
+
+This adds a Cognito domain and the Google provider, and updates the existing app client
+**in place** — its id does not change, so existing accounts and sessions keep working. The
+generated `config.json` gains `oauthDomain`, and only then do the sign-in and sign-up pages
+show the Google button.
+
+Every later deploy needs the same variable. Deploying without it removes Google sign-in
+again (the e-mail accounts are untouched; Google accounts stay in the pool but cannot sign
+in until it is back).
+
+Things to know:
+
+- If `spokiy-ucu` is taken, the deploy fails on `AuthDomain`; set
+  `SPOKIY_AUTH_DOMAIN_PREFIX=<something else>` and update the Google URIs.
+- A person who signed up with e-mail and later uses Google with the same address gets a
+  second, separate account (separate progress). Fine for the demo; linking them needs a
+  pre-sign-up Lambda.
+- Secrets Manager costs about $0.40 a month for the one secret.
 
 ## Running the frontend locally against the deployed API
 

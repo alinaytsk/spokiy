@@ -16,9 +16,10 @@ import {
   confirmSignUp as amplifyConfirmSignUp,
   signIn as amplifySignIn,
   signOut as amplifySignOut,
+  signInWithRedirect,
 } from 'aws-amplify/auth';
 
-import { isAuthConfigured } from '../lib/config.js';
+import { isAuthConfigured, isGoogleConfigured } from '../lib/config.js';
 import { AuthContext } from './context.js';
 import { loadCurrentUser } from './session.js';
 
@@ -30,6 +31,7 @@ function notConfigured() {
 
 export function AuthProvider({ initialUser = null, children }) {
   const configured = isAuthConfigured();
+  const googleEnabled = isGoogleConfigured();
 
   const [user, setUser] = useState(initialUser);
   const [pendingUsername, setPendingUsername] = useState(null);
@@ -43,6 +45,7 @@ export function AuthProvider({ initialUser = null, children }) {
     () => ({
       user,
       configured,
+      googleEnabled,
       pendingUsername,
 
       signUp: async (email, password) => {
@@ -68,13 +71,20 @@ export function AuthProvider({ initialUser = null, children }) {
         await refresh();
       },
 
+      // Leaves the site for Google and comes back to '/'; main.jsx picks the user up from
+      // there on the next load.
+      signInWithGoogle: async () => {
+        if (!googleEnabled) notConfigured();
+        await signInWithRedirect({ provider: 'Google' });
+      },
+
       signOut: async () => {
         if (!configured) notConfigured();
         await amplifySignOut();
         setUser(null);
       },
     }),
-    [user, configured, pendingUsername, refresh],
+    [user, configured, googleEnabled, pendingUsername, refresh],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
