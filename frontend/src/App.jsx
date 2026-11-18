@@ -7,6 +7,7 @@ import { Link, Route, Routes } from 'react-router-dom';
 
 import { useAuth } from './auth/context.js';
 import ProtectedRoute from './auth/ProtectedRoute.jsx';
+import ScrollToTop from './components/ScrollToTop.jsx';
 import Home from './pages/Home.jsx';
 import CheatSheet from './pages/CheatSheet.jsx';
 import Placeholder from './pages/Placeholder.jsx';
@@ -31,6 +32,8 @@ function Nav() {
         sPOKiy
       </Link>
       <span className="spacer" />
+      {/* Straight to the topic list, past the 3D hero. */}
+      <Link to="/#topics">Lessons</Link>
       <Link to="/quiz/practice">Practice</Link>
       <Link to="/cheat-sheet">Cheat sheets</Link>
       <Link to="/progress">Progress</Link>
@@ -58,6 +61,7 @@ function Nav() {
 export function App() {
   return (
     <div className="shell">
+      <ScrollToTop />
       <Nav />
 
       <main>

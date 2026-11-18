@@ -9,6 +9,8 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
+import NextLesson from '../../components/NextLesson.jsx';
+
 const TOPIC_ID = 'number-representation';
 
 const WIDTH = 8;
@@ -161,6 +163,7 @@ export function NumberRepresentation() {
       <footer className="lessonLinks">
         <Link to={`/quiz/${TOPIC_ID}`}>Practise this topic →</Link>
         <Link to="/cheat-sheet">Cheat sheet</Link>
+        <NextLesson />
       </footer>
     </article>
   );

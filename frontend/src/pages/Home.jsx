@@ -8,7 +8,7 @@
 // it is one: five topics, which are ready, which are coming.
 
 import { lazy, Suspense, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import { api } from '../lib/api.js';
 
@@ -28,6 +28,7 @@ export function Home() {
   const [topics, setTopics] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const location = useLocation();
 
   useEffect(() => {
     api
@@ -42,6 +43,16 @@ export function Home() {
     return () => document.body.classList.remove('home');
   }, []);
 
+  // "Lessons" in the nav links here as /#topics. The browser cannot do the jump itself:
+  // the section does not exist yet when the URL changes, and until the topics arrive the
+  // page is too short to scroll that far - so jump once they have. Depending on
+  // location.key makes a second click on "Lessons" while already here jump again.
+  useEffect(() => {
+    if (!loading && location.hash === '#topics') {
+      document.getElementById('topics')?.scrollIntoView({ block: 'start' });
+    }
+  }, [loading, location.hash, location.key]);
+
   const ready = topics.filter((topic) => BUILT.has(topic.id)).length;
 
   return (
@@ -50,7 +61,7 @@ export function Home() {
         <Hero3D />
       </Suspense>
 
-      <div className="sectionHead">
+      <div className="sectionHead" id="topics">
         <h2>Topics</h2>
         {topics.length > 0 && (
           <span>

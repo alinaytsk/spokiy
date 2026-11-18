@@ -17,6 +17,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 
+import NextLesson from '../../components/NextLesson.jsx';
+
 const TOPIC_ID = 'cache-memory-hierarchy';
 
 // Word addresses 0-63: six bits, short enough to print in full.
@@ -499,6 +501,7 @@ export function CacheHitMiss() {
         <Link to={`/quiz/${TOPIC_ID}`}>Practise this topic →</Link>
         <Link to={`/topics/${TOPIC_ID}`}>← Part 1: the memory hierarchy</Link>
         <Link to={`/cheat-sheet#${TOPIC_ID}`}>Cheat sheet</Link>
+        <NextLesson />
       </footer>
     </article>
   );
