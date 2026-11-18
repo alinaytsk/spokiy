@@ -257,8 +257,12 @@ body.home .nav {
   margin-left: calc(50% - 50vw);
 }
 
+/* The placeholder shown while three.js loads keeps the hero's full height. If it were
+   shorter, the topic list would jump down by two screens the moment the scene arrived -
+   and a "Lessons" link that had just scrolled to #topics would be left pointing at the
+   middle of the hero. */
 .hero3dLoading {
-  height: 100vh;
+  background: var(--bg);
 }
 
 .hero3dSticky {
@@ -412,6 +416,7 @@ body.home .nav {
 
 /* --- topic list ------------------------------------------------------------------- */
 .sectionHead {
+  scroll-margin-top: 24px;
   display: flex;
   align-items: baseline;
   justify-content: space-between;
@@ -928,6 +933,13 @@ form button {
 .lessonLinks a:hover {
   border-color: var(--on);
   color: var(--on);
+}
+
+/* The way forward sits apart from the other links, on the right. */
+.lessonLinks .nextLesson {
+  margin-left: auto;
+  color: var(--on);
+  border-color: var(--on);
 }
 
 .siteFooter {

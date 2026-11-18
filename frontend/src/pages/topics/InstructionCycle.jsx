@@ -13,6 +13,8 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
+import NextLesson from '../../components/NextLesson.jsx';
+
 const TOPIC_ID = 'instruction-cycle';
 
 // Each step says which phase it belongs to, what happens, and what the registers hold
@@ -251,6 +253,7 @@ export function InstructionCycle() {
       <footer className="lessonLinks">
         <Link to={`/quiz/${TOPIC_ID}`}>Practise this topic →</Link>
         <Link to="/cheat-sheet">Cheat sheet</Link>
+        <NextLesson />
       </footer>
     </article>
   );
