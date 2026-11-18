@@ -1,6 +1,7 @@
 // The whole of sPOKiy's AWS footprint, in one stack.
 //
 //   Cognito user pool + app client     sign-up, e-mail confirmation, sign-in
+//   (optional) Google sign-in          only when SPOKIY_GOOGLE_CLIENT_ID is set at deploy
 //   DynamoDB x3 (on demand)            progress, requests, feedback
 //   Lambda + HTTP API                  the Express app from backend/, unchanged
 //   S3 + CloudFront                    frontend/dist over HTTPS, plus a generated config.json
@@ -25,7 +26,7 @@ import { existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { Annotations, CfnOutput, Duration, RemovalPolicy, Stack } from 'aws-cdk-lib';
+import { Annotations, CfnOutput, Duration, RemovalPolicy, SecretValue, Stack } from 'aws-cdk-lib';
 import { HttpApi } from 'aws-cdk-lib/aws-apigatewayv2';
 import { HttpLambdaIntegration } from 'aws-cdk-lib/aws-apigatewayv2-integrations';
 import {
@@ -38,8 +39,12 @@ import {
 import { S3BucketOrigin } from 'aws-cdk-lib/aws-cloudfront-origins';
 import {
   AccountRecovery,
+  OAuthScope,
+  ProviderAttribute,
   UserPool,
   UserPoolClient,
+  UserPoolClientIdentityProvider,
+  UserPoolIdentityProviderGoogle,
   VerificationEmailStyle,
 } from 'aws-cdk-lib/aws-cognito';
 import { AttributeType, BillingMode, Table } from 'aws-cdk-lib/aws-dynamodb';
@@ -56,6 +61,20 @@ const frontendDist = join(repoRoot, 'frontend', 'dist');
 // The local dev server, allowed as a CORS origin so teammates can point `npm run dev` at
 // the deployed API. CORS is not what protects the private routes - the Cognito token is.
 const LOCAL_DEV_ORIGIN = 'http://localhost:5173';
+
+// Google sign-in is opt-in. With SPOKIY_GOOGLE_CLIENT_ID unset, none of the Google pieces
+// below are created and the stack is exactly the e-mail-only one - nothing changes for a
+// deploy that does not ask for it.
+//
+// The client secret is never in the repo or the template: it is read from Secrets Manager
+// at deploy time (a CloudFormation dynamic reference). Create it once:
+//   aws secretsmanager create-secret --name spokiy/google-client-secret --secret-string '<secret>'
+const GOOGLE_CLIENT_ID = process.env.SPOKIY_GOOGLE_CLIENT_ID;
+const GOOGLE_SECRET_NAME = 'spokiy/google-client-secret';
+
+// The Cognito hosted domain is <prefix>.auth.<region>.amazoncognito.com. The prefix must be
+// unique in the region, so it can be overridden if this one is taken.
+const AUTH_DOMAIN_PREFIX = process.env.SPOKIY_AUTH_DOMAIN_PREFIX || 'spokiy-ucu';
 
 export class SpokiyStack extends Stack {
   constructor(scope, id, props) {
@@ -88,16 +107,6 @@ export class SpokiyStack extends Stack {
       },
       accountRecovery: AccountRecovery.EMAIL_ONLY,
       removalPolicy: RemovalPolicy.RETAIN,
-    });
-
-    // A browser cannot keep a secret, so no client secret. SRP is what aws-amplify/auth
-    // uses by default for signIn().
-    const userPoolClient = new UserPoolClient(this, 'WebClient', {
-      userPool,
-      userPoolClientName: 'spokiy-web',
-      generateSecret: false,
-      authFlows: { userSrp: true },
-      preventUserExistenceErrors: true,
     });
 
     // --- DynamoDB --------------------------------------------------------------------
@@ -175,6 +184,73 @@ export class SpokiyStack extends Stack {
 
     const siteUrl = `https://${distribution.distributionDomainName}`;
 
+    // --- Google sign-in (optional) ----------------------------------------------------
+    //
+    // Google sends the user back to Cognito's hosted domain, Cognito to the site. So the
+    // Google OAuth client must list https://<auth domain>/oauth2/idpresponse as its
+    // redirect URI (printed as the GoogleRedirectUri output), and the app client below
+    // must list the site's own URL as a callback.
+    //
+    // Google users land in the same pool as e-mail users, with e-mail mapped from the
+    // Google profile, so the API sees the same kind of ID token either way.
+
+    let google = null;
+
+    if (GOOGLE_CLIENT_ID) {
+      userPool.addDomain('AuthDomain', {
+        cognitoDomain: { domainPrefix: AUTH_DOMAIN_PREFIX },
+      });
+
+      const provider = new UserPoolIdentityProviderGoogle(this, 'Google', {
+        userPool,
+        clientId: GOOGLE_CLIENT_ID,
+        clientSecretValue: SecretValue.secretsManager(GOOGLE_SECRET_NAME),
+        scopes: ['openid', 'email', 'profile'],
+        attributeMapping: {
+          email: ProviderAttribute.GOOGLE_EMAIL,
+          emailVerified: ProviderAttribute.GOOGLE_EMAIL_VERIFIED,
+          givenName: ProviderAttribute.GOOGLE_GIVEN_NAME,
+          familyName: ProviderAttribute.GOOGLE_FAMILY_NAME,
+        },
+      });
+
+      google = {
+        provider,
+        // What Amplify wants: the host only, no scheme.
+        domainHost: `${AUTH_DOMAIN_PREFIX}.auth.${this.region}.amazoncognito.com`,
+      };
+    }
+
+    // The trailing slash matters: Cognito compares callback URLs exactly, and the frontend
+    // sends `${origin}/`.
+    const callbackUrls = [`${siteUrl}/`, `${LOCAL_DEV_ORIGIN}/`];
+
+    // A browser cannot keep a secret, so no client secret. SRP is what aws-amplify/auth
+    // uses by default for signIn(). Created after the distribution only because the Google
+    // callback URLs need the site's domain; its logical id is unchanged.
+    const userPoolClient = new UserPoolClient(this, 'WebClient', {
+      userPool,
+      userPoolClientName: 'spokiy-web',
+      generateSecret: false,
+      authFlows: { userSrp: true },
+      preventUserExistenceErrors: true,
+      ...(google && {
+        supportedIdentityProviders: [
+          UserPoolClientIdentityProvider.COGNITO,
+          UserPoolClientIdentityProvider.GOOGLE,
+        ],
+        oAuth: {
+          flows: { authorizationCodeGrant: true },
+          scopes: [OAuthScope.OPENID, OAuthScope.EMAIL, OAuthScope.PROFILE],
+          callbackUrls,
+          logoutUrls: callbackUrls,
+        },
+      }),
+    });
+
+    // The client can only name GOOGLE once the provider exists.
+    if (google) userPoolClient.node.addDependency(google.provider);
+
     // --- the API ---------------------------------------------------------------------
 
     if (!existsSync(join(backendDir, 'node_modules', 'express'))) {
@@ -251,6 +327,9 @@ export class SpokiyStack extends Stack {
         region: this.region,
         userPoolId: userPool.userPoolId,
         userPoolClientId: userPoolClient.userPoolClientId,
+        // Only present when Google sign-in is deployed; the frontend shows the button
+        // only if it is there.
+        ...(google && { oauthDomain: google.domainHost }),
       }),
     );
 
@@ -276,5 +355,12 @@ export class SpokiyStack extends Stack {
     new CfnOutput(this, 'TableRequests', { value: requestsTable.tableName });
     new CfnOutput(this, 'TableFeedback', { value: feedbackTable.tableName });
     new CfnOutput(this, 'ApiLogGroup', { value: apiLogs.logGroupName });
+
+    if (google) {
+      new CfnOutput(this, 'GoogleRedirectUri', {
+        value: `https://${google.domainHost}/oauth2/idpresponse`,
+        description: 'Authorised redirect URI for the Google OAuth client',
+      });
+    }
   }
 }

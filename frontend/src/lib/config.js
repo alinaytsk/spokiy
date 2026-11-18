@@ -38,3 +38,12 @@ export function getConfig() {
 export function isAuthConfigured(config = cached) {
   return Boolean(config?.userPoolId && config?.userPoolClientId);
 }
+
+/**
+ * True when the deploy also set up Google sign-in. The stack writes `oauthDomain` (the
+ * Cognito hosted domain) into config.json only in that case, so without it the site is the
+ * e-mail-only one and no Google button is shown.
+ */
+export function isGoogleConfigured(config = cached) {
+  return isAuthConfigured(config) && Boolean(config?.oauthDomain);
+}

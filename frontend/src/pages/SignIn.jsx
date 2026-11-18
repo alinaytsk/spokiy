@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import { useAuth } from '../auth/context.js';
+import GoogleButton from '../auth/GoogleButton.jsx';
 
 export function SignIn() {
   const { signIn, configured } = useAuth();
@@ -66,6 +67,8 @@ export function SignIn() {
           {busy ? 'Signing in…' : 'Sign in'}
         </button>
       </form>
+
+      <GoogleButton />
 
       {error && <p className="error">{error}</p>}
 

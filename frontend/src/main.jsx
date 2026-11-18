@@ -7,12 +7,15 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Amplify } from 'aws-amplify';
+// Finishes a Google sign-in when Cognito redirects back to the site. Imported explicitly:
+// the redirect lands on a fresh page load where signInWithRedirect() was never called.
+import 'aws-amplify/auth/enable-oauth-listener';
 import { BrowserRouter } from 'react-router-dom';
 
 import App from './App.jsx';
 import AuthProvider from './auth/AuthProvider.jsx';
 import { loadCurrentUser } from './auth/session.js';
-import { loadConfig, isAuthConfigured } from './lib/config.js';
+import { loadConfig, isAuthConfigured, isGoogleConfigured } from './lib/config.js';
 import './index.css';
 
 const root = createRoot(document.getElementById('root'));
@@ -42,6 +45,20 @@ async function start() {
         Cognito: {
           userPoolId: config.userPoolId,
           userPoolClientId: config.userPoolClientId,
+          // Only with Google deployed. The redirect URLs must match the app client's
+          // callback list exactly, trailing slash included.
+          ...(isGoogleConfigured(config) && {
+            loginWith: {
+              email: true,
+              oauth: {
+                domain: config.oauthDomain,
+                scopes: ['openid', 'email', 'profile'],
+                redirectSignIn: [`${window.location.origin}/`],
+                redirectSignOut: [`${window.location.origin}/`],
+                responseType: 'code',
+              },
+            },
+          }),
         },
       },
     });
@@ -51,7 +68,8 @@ async function start() {
     console.info('No Cognito pool in config.json - running without sign-in.');
   }
 
-  // Settled before the first render, so nothing has to show a "checking…" state.
+  // Settled before the first render, so nothing has to show a "checking…" state. Coming
+  // back from Google, Amplify holds getCurrentUser() until the code exchange is done.
   const initialUser = await loadCurrentUser();
 
   root.render(
