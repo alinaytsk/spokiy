@@ -10,6 +10,7 @@ import ProtectedRoute from './auth/ProtectedRoute.jsx';
 import Home from './pages/Home.jsx';
 import CheatSheet from './pages/CheatSheet.jsx';
 import Placeholder from './pages/Placeholder.jsx';
+import Privacy from './pages/Privacy.jsx';
 import Progress from './pages/Progress.jsx';
 import Quiz from './pages/Quiz.jsx';
 import RequestTopic from './pages/RequestTopic.jsx';
@@ -97,6 +98,7 @@ export function App() {
           {/* --- auth ------------------------------------------------------------------ */}
           <Route path="/sign-in" element={<SignIn />} />
           <Route path="/sign-up" element={<SignUp />} />
+          <Route path="/privacy" element={<Privacy />} />
 
           <Route path="*" element={<Placeholder what="Page not found" />} />
         </Routes>
@@ -104,7 +106,8 @@ export function App() {
 
       <footer className="siteFooter">
         <p className="muted">
-          A student project for Computer Organization Principles, UCU.
+          A student project for Computer Organization Principles, UCU. ·{' '}
+          <Link to="/privacy">Privacy</Link>
         </p>
       </footer>
     </div>
