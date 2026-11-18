@@ -74,7 +74,9 @@ router.get('/:id/quiz', (req, res) => {
 // Body: { answers: [{ questionId, selectedIndex }] }
 //
 // Unanswered questions are graded as wrong rather than rejected, so a student who runs out
-// of time still gets a score and, more importantly, still gets the explanations.
+// of time still gets a score. Only answered questions come back with the correct answer
+// and the explanation: the quiz page checks one question at a time, and returning every
+// question's answer on the first "Check" would put the whole key in the network tab.
 router.post('/:id/quiz/grade', (req, res) => {
   if (!findTopic(req.params.id)) {
     return res.status(404).json({ error: 'Unknown topic' });
@@ -97,7 +99,10 @@ router.post('/:id/quiz/grade', (req, res) => {
   );
 
   const results = bank.questions.map((question) => {
-    const selectedIndex = chosen.has(question.id) ? chosen.get(question.id) : null;
+    if (!chosen.has(question.id)) {
+      return { questionId: question.id, prompt: question.prompt, selectedIndex: null, correct: false };
+    }
+    const selectedIndex = chosen.get(question.id);
     return {
       questionId: question.id,
       prompt: question.prompt,

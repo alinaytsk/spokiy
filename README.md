@@ -7,6 +7,8 @@ moves, then practise on quiz questions written in the style the course actually 
 
 Built by three students at UCU for second-year CS and Robotics.
 
+**Live:** https://d3sf4eia3krhf5.cloudfront.net — sign up with e-mail or Google.
+
 ## Layout
 
 ```
@@ -63,6 +65,8 @@ npm run dev
 Open http://localhost:5173. The finished lessons are linked from the home page.
 
 `npm test` in `frontend/` checks the pipelining model against the textbook cases.
+`npm test` in `backend/` checks the quiz bank, the cheat sheets and that grading one
+question does not give away the answers to the others. Neither needs AWS.
 
 ### Progress, requests and feedback need DynamoDB
 
